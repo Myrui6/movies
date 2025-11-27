@@ -70,7 +70,8 @@ createApp({
 
         applyRefund(orderId) {
             if (confirm('确定要申请退票吗？')) {
-                alert('申请退票功能开发中...');
+                // 跳转到退票页面，传递订单ID
+                window.location.href = `/ticket-refund?order_id=${orderId}`;
             }
         }
     }

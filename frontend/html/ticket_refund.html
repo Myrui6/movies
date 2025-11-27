@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>申请退票 - 影院管理系统</title>
+    <link rel="stylesheet" href="../css/ticket_refund.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <!-- 顶部导航栏 -->
+            <header class="header">
+                <div class="welcome">欢迎 {{ username }} 进入影院！</div>
+                <nav class="nav-menu">
+                    <a href="/user-buy" class="nav-item">购票</a>
+                    <a href="/my-order" class="nav-item">我的订单</a>
+                    <a href="/" class="nav-item">退出登录</a>
+                </nav>
+            </header>
+
+            <!-- 内容标题栏 -->
+            <div class="content-header">
+                <div class="section-title">
+                    <h2>退票详情</h2>
+                    <div class="title-underline"></div>
+                </div>
+            </div>
+
+            <!-- 退票表单 -->
+            <main class="main-content">
+                <div class="form-container">
+                    <form class="refund-form" @submit.prevent="submitRefund">
+                        <div class="form-group">
+                            <label for="order-id" class="form-label">订单编号</label>
+                            <input
+                                type="text"
+                                id="order-id"
+                                v-model="orderId"
+                                class="form-input"
+                                readonly
+                                disabled
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reason" class="form-label">退票原因</label>
+                            <textarea
+                                id="reason"
+                                v-model="reason"
+                                class="form-textarea"
+                                placeholder="请输入退票原因..."
+                                rows="4"
+                                @input="autoResizeTextarea"
+                            ></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="submit-btn">确认提交</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/ticket_refund.js"></script>
+</body>
+</html>
