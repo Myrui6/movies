@@ -80,6 +80,11 @@ def my_order():
 def ticket_refund():
     return send_from_directory('frontend/html', 'ticket_refund.html')
 
+# 在现有的路由后面添加
+@app.route('/all-orders')
+def all_orders():
+    return send_from_directory('frontend/html', 'all_orders.html')
+
 if __name__ == '__main__':
     print(f"上传目录: {UPLOAD_FOLDER}")
     app.run(debug=True, port=5000)

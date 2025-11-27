@@ -156,3 +156,142 @@ def apply_refund(order_id):
     except Exception as e:
         print(f"申请退票错误: {e}")
         return jsonify({"success": False, "message": f"申请退票失败: {str(e)}"})
+
+
+# 在orders.py文件末尾添加
+
+@orders_bp.route('/api/orders/filter-options', methods=['GET'])
+def get_order_filter_options():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # 获取所有不重复的影片名
+        cursor.execute("SELECT DISTINCT movie_name FROM `order` WHERE movie_name IS NOT NULL AND movie_name != ''")
+        movie_names = [row[0] for row in cursor.fetchall()]
+
+        # 获取所有不重复的放映日期（只取日期部分）
+        cursor.execute("SELECT DISTINCT DATE(start_time) FROM `order` WHERE start_time IS NOT NULL ORDER BY DATE(start_time) DESC")
+        dates = [row[0].strftime('%Y-%m-%d') for row in cursor.fetchall()]
+
+        # 获取所有不重复的放映厅
+        cursor.execute("SELECT DISTINCT hall FROM `order` WHERE hall IS NOT NULL AND hall != ''")
+        halls = [row[0] for row in cursor.fetchall()]
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({
+            "success": True,
+            "data": {
+                "movieNames": movie_names,
+                "dates": dates,
+                "halls": halls
+            }
+        })
+
+    except Exception as e:
+        print(f"获取筛选选项错误: {e}")
+        return jsonify({"success": False, "message": f"获取筛选选项失败: {str(e)}"})
+
+
+
+# 在orders.py文件末尾添加
+
+@orders_bp.route('/api/orders/all', methods=['GET'])
+def get_all_orders():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT id, username, movie_name, start_time, hall, seat, total_price, state, reason
+            FROM `order`
+            ORDER BY start_time DESC
+        """)
+
+        orders = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        order_list = []
+        for order in orders:
+            order_list.append({
+                'id': order[0],
+                'username': order[1],
+                'movie_name': order[2],
+                'start_time': order[3].strftime('%Y-%m-%d %H:%M:%S') if order[3] else '',
+                'hall': order[4],
+                'seat': order[5],
+                'total_price': order[6],
+                'state': order[7],
+                'reason': order[8]
+            })
+
+        return jsonify({"success": True, "data": order_list})
+
+    except Exception as e:
+        print(f"获取所有订单错误: {e}")
+        return jsonify({"success": False, "message": f"获取订单失败: {str(e)}"})
+
+@orders_bp.route('/api/orders/search', methods=['GET'])
+def search_orders():
+    try:
+        movie_name = request.args.get('movie_name', '')
+        start_date = request.args.get('start_date', '')
+        hall = request.args.get('hall', '')
+        state = request.args.get('state', '')
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # 构建查询条件
+        query = """
+            SELECT id, username, movie_name, start_time, hall, seat, total_price, state, reason
+            FROM `order`
+            WHERE 1=1
+        """
+        params = []
+
+        if movie_name:
+            query += " AND movie_name = %s"
+            params.append(movie_name)
+
+        if start_date:
+            query += " AND DATE(start_time) = %s"
+            params.append(start_date)
+
+        if hall:
+            query += " AND hall = %s"
+            params.append(hall)
+
+        if state:
+            query += " AND state = %s"
+            params.append(int(state))
+
+        query += " ORDER BY start_time DESC"
+
+        cursor.execute(query, params)
+        orders = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        order_list = []
+        for order in orders:
+            order_list.append({
+                'id': order[0],
+                'username': order[1],
+                'movie_name': order[2],
+                'start_time': order[3].strftime('%Y-%m-%d %H:%M:%S') if order[3] else '',
+                'hall': order[4],
+                'seat': order[5],
+                'total_price': order[6],
+                'state': order[7],
+                'reason': order[8]
+            })
+
+        return jsonify({"success": True, "data": order_list})
+
+    except Exception as e:
+        print(f"搜索订单错误: {e}")
+        return jsonify({"success": False, "message": f"搜索订单失败: {str(e)}"})
