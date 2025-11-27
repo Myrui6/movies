@@ -9,6 +9,7 @@ from routes.orders import orders_bp  # 新增导入
 import os
 
 app = Flask(__name__)
+app.secret_key = 'your-secret-key-here'
 CORS(app)
 
 # 注册蓝图

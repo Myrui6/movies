@@ -8,19 +8,30 @@ createApp({
         }
     },
     mounted() {
-        this.getUsername();
-        this.loadOrders();
+        this.getCurrentUser();
     },
     methods: {
-        getUsername() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const username = urlParams.get('username');
-            this.username = username || 'user';
+        async getCurrentUser() {
+            try {
+                const response = await fetch('/api/current-user');
+                const result = await response.json();
+
+                if (result.success) {
+                    this.username = result.data.username;
+                    this.loadOrders();
+                } else {
+                    console.error('获取用户信息失败:', result.message);
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('网络错误:', error);
+                window.location.href = '/';
+            }
         },
 
         async loadOrders() {
             try {
-                const response = await fetch(`/api/orders?username=${this.username}`);
+                const response = await fetch('/api/orders');
                 const result = await response.json();
 
                 if (result.success) {
@@ -59,7 +70,6 @@ createApp({
 
         applyRefund(orderId) {
             if (confirm('确定要申请退票吗？')) {
-                // 后续实现退票功能
                 alert('申请退票功能开发中...');
             }
         }

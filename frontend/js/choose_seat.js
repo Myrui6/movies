@@ -27,15 +27,26 @@ createApp({
         }
     },
     mounted() {
-        this.getUsername();
+        this.getCurrentUser();
         this.loadScheduleInfo();
         this.loadSeats();
     },
     methods: {
-        getUsername() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const username = urlParams.get('username');
-            this.username = username || 'user';
+        async getCurrentUser() {
+            try {
+                const response = await fetch('/api/current-user');
+                const result = await response.json();
+
+                if (result.success) {
+                    this.username = result.data.username;
+                } else {
+                    console.error('获取用户信息失败:', result.message);
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('网络错误:', error);
+                window.location.href = '/';
+            }
         },
 
         async loadScheduleInfo() {
@@ -135,7 +146,6 @@ createApp({
                 const scheduleId = urlParams.get('schedule_id');
 
                 const orderData = {
-                    username: this.username,
                     movie_name: this.scheduleInfo.movie_name,
                     start_time: this.scheduleInfo.start_time,
                     hall: this.scheduleInfo.hall,
@@ -157,7 +167,7 @@ createApp({
 
                 if (result.success) {
                     alert('购票成功！');
-                    window.location.href = `/my-order?username=${this.username}`;
+                    window.location.href = `/my-order`;
                 } else {
                     alert('购票失败：' + result.message);
                 }

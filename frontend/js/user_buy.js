@@ -4,13 +4,31 @@ createApp({
     data() {
         return {
             movies: [],
-            username: 'user'
+            username: ''
         }
     },
     mounted() {
+        this.getCurrentUser();
         this.loadMoviesWithSchedules();
     },
     methods: {
+        async getCurrentUser() {
+            try {
+                const response = await fetch('/api/current-user');
+                const result = await response.json();
+
+                if (result.success) {
+                    this.username = result.data.username;
+                } else {
+                    console.error('获取用户信息失败:', result.message);
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('网络错误:', error);
+                window.location.href = '/';
+            }
+        },
+
         async loadMoviesWithSchedules() {
             try {
                 const response = await fetch('/api/movies/with-schedules');
@@ -27,11 +45,11 @@ createApp({
         },
 
         buyTicket(movieId) {
-            window.location.href = `/choose-schedule?movie_id=${movieId}&username=${this.username}`;
+            window.location.href = `/choose-schedule?movie_id=${movieId}`;
         },
 
         goToMyOrder() {
-            window.location.href = `/my-order?username=${this.username}`;
+            window.location.href = `/my-order`;
         }
     }
 }).mount('#app');

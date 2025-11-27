@@ -1,7 +1,8 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session  # 添加session导入
 from database import get_db_connection
 
 auth_bp = Blueprint('auth', __name__)
+
 
 @auth_bp.route('/api/login', methods=['POST'])
 def login():
@@ -18,12 +19,10 @@ def login():
         cursor = conn.cursor()
 
         if user_type == '员工':
-            # 管理员登录 - 查询administrator表
             cursor.execute("SELECT id, name FROM administrator WHERE name = %s AND password = %s", (username, password))
             user = cursor.fetchone()
             user_table = "administrator"
         else:
-            # 普通用户登录 - 查询user表
             cursor.execute("SELECT id, name FROM user WHERE name = %s AND password = %s", (username, password))
             user = cursor.fetchone()
             user_table = "user"
@@ -32,6 +31,11 @@ def login():
         conn.close()
 
         if user:
+            # 设置session - 新增代码
+            session['user_id'] = user[0]
+            session['username'] = user[1]
+            session['user_type'] = user_type
+
             return jsonify({
                 "success": True,
                 "message": "登录成功",
@@ -48,3 +52,32 @@ def login():
     except Exception as e:
         print(f"登录错误: {e}")
         return jsonify({"success": False, "message": f"登录失败: {str(e)}"})
+
+
+# 新增获取当前用户信息的接口
+@auth_bp.route('/api/current-user', methods=['GET'])
+def get_current_user():
+    if 'username' in session:
+        return jsonify({
+            "success": True,
+            "data": {
+                "id": session['user_id'],
+                "username": session['username'],
+                "type": session['user_type']
+            }
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "用户未登录"
+        }), 401
+
+
+# 新增退出登录接口
+@auth_bp.route('/api/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return jsonify({
+        "success": True,
+        "message": "退出登录成功"
+    })
