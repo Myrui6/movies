@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用户购票 - 影院管理系统</title>
+    <title>购票 - 影院管理系统</title>
     <link rel="stylesheet" href="../css/user_buy.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
@@ -12,7 +12,7 @@
         <div class="container">
             <!-- 顶部导航栏 -->
             <header class="header">
-                <div class="welcome">欢迎进入影院！</div>
+                <div class="welcome">欢迎 {{ username }} 进入影院！</div>
                 <nav class="nav-menu">
                     <a href="/user-buy" class="nav-item">购票</a>
                     <a href="/my-order" class="nav-item">我的订单</a>
@@ -25,6 +25,14 @@
                 <div class="section-title">
                     <h2>热映影片</h2>
                     <div class="title-underline"></div>
+                </div>
+            </div>
+
+            <!-- 搜索栏 -->
+            <div class="search-bar">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="搜索影片..." v-model="searchKeyword" @keyup.enter="searchMovies">
+                    <button class="search-btn" @click="searchMovies">搜索</button>
                 </div>
             </div>
 
@@ -60,7 +68,7 @@
                     </table>
                 </div>
                 <div class="empty-message" v-else>
-                    <p>还没电影排片哦~</p>
+                    <p :class="{ 'search-not-found': searchKeyword }" v-text="searchKeyword ? '没找到哦~' : '目前暂无电影！'"></p>
                 </div>
             </main>
         </div>

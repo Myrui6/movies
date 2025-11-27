@@ -4,7 +4,8 @@ createApp({
     data() {
         return {
             movies: [],
-            username: ''
+            username: '',
+            searchKeyword: ''
         }
     },
     mounted() {
@@ -35,13 +36,27 @@ createApp({
                 const result = await response.json();
 
                 if (result.success) {
-                    this.movies = result.data;
+                    // 如果有搜索关键词，过滤结果
+                    if (this.searchKeyword) {
+                        const keyword = this.searchKeyword.toLowerCase();
+                        this.movies = result.data.filter(movie =>
+                            movie.name && movie.name.toLowerCase().includes(keyword)
+                        );
+                    } else {
+                        this.movies = result.data;
+                    }
                 } else {
                     console.error('加载影片失败:', result.message);
+                    this.movies = [];
                 }
             } catch (error) {
                 console.error('网络错误:', error);
+                this.movies = [];
             }
+        },
+
+        async searchMovies() {
+            await this.loadMoviesWithSchedules();
         },
 
         buyTicket(movieId) {
