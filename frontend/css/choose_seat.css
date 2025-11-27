@@ -1,0 +1,294 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 顶部导航栏 */
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 0 40px;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.welcome {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 导航菜单 */
+.nav-menu {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #34495e;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 0;
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.nav-item:hover {
+    color: #3498db;
+    transform: translateY(-1px);
+}
+
+.nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: #3498db;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.nav-item:hover::after {
+    width: 100%;
+}
+
+/* 主要内容区域 */
+.main-content {
+    flex: 1;
+    padding: 40px;
+}
+
+.seat-container {
+    display: flex;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 左侧座位图 */
+.seat-map-section {
+    flex: 2;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+
+.screen {
+    background: #ecf0f1;
+    color: #2c3e50;
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 18px;
+    width: calc(100% - 60px);
+    /* 移除 margin-left，因为现在整体居中了 */
+}
+
+.seat-map {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center; /* 居中 */
+}
+
+.seat-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.row-label {
+    width: 30px;
+    text-align: center;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.seats {
+    display: flex;
+    gap: 8px;
+}
+
+.seat {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.seat.available {
+    background: #90EE90; /* 更浅的绿色 */
+    color: #2c3e50; /* 深色文字 */
+    border-color: #7CFC00;
+}
+
+.seat.available:hover {
+    background: #7CFC00; /* 悬停时稍深 */
+    color: white;
+    transform: scale(1.1);
+}
+
+.seat.sold {
+    background: #2c3e50;
+    color: white;
+    border-color: #2c3e50;
+    cursor: not-allowed;
+}
+
+.seat.selected {
+    background: #FFB6C1; /* 更浅的粉色/红色 */
+    color: #2c3e50; /* 深色文字 */
+    border-color: #FF69B4;
+    transform: scale(1.1);
+}
+
+.seat.selected:hover {
+    background: #FF69B4; /* 悬停时稍深 */
+    color: white;
+}
+
+.seat-legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.color-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid #ddd;
+}
+
+.color-box.available {
+    background: #27ae60;
+    border-color: #219a52;
+}
+
+.color-box.sold {
+    background: #2c3e50;
+    border-color: #2c3e50;
+}
+
+.color-box.selected {
+    background: #e91e63;
+    border-color: #c2185b;
+}
+
+/* 右侧信息 */
+.info-section {
+    flex: 1;
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    height: fit-content;
+}
+
+.info-card h3 {
+    color: #2c3e50;
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.info-item label {
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+.info-item span {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.total-price {
+    color: #e74c3c;
+    font-size: 18px;
+}
+
+.confirm-btn {
+    width: 100%;
+    padding: 15px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.confirm-btn:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+}
+
+/* 修改座位图居中 */
+.seat-map-section {
+    flex: 2;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 居中 */
+}

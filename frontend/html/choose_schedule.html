@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择场次 - 影院管理系统</title>
+    <link rel="stylesheet" href="../css/choose_schedule.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <!-- 顶部导航栏 -->
+            <header class="header">
+                <div class="welcome">欢迎进入影院！</div>
+                <nav class="nav-menu">
+                    <a href="/user-buy" class="nav-item">购票</a>
+                    <a href="#" class="nav-item">我的订单</a>
+                    <a href="/" class="nav-item">退出登录</a>
+                </nav>
+            </header>
+
+            <!-- 影片详情板块 -->
+            <main class="main-content">
+                <div class="movie-detail-container">
+                    <div class="movie-detail-card">
+                        <!-- 左侧海报 -->
+                        <div class="poster-section">
+                            <img v-if="movie.picture" :src="movie.picture" class="movie-poster" alt="电影海报">
+                            <div v-else class="no-poster-large">暂无海报</div>
+                        </div>
+
+                        <!-- 右侧信息 -->
+                        <div class="info-section">
+                            <div class="info-item">
+                                <label>影片名称：</label>
+                                <span v-text="movie.name"></span>
+                            </div>
+                            <div class="info-item">
+                                <label>影片类型：</label>
+                                <span v-text="movie.type"></span>
+                            </div>
+                            <div class="info-item">
+                                <label>地区：</label>
+                                <span v-text="movie.region"></span>
+                            </div>
+                            <div class="info-item">
+                                <label>放映时长：</label>
+                                <span v-text="movie.time + '分钟'"></span>
+                            </div>
+                            <div class="info-item full-width">
+                                <label>剧情介绍：</label>
+                                <div class="brief-content" v-text="movie.brief"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 场次选择标题栏 -->
+                    <div class="schedule-header">
+                        <div class="section-title">
+                            <h2>场次选择</h2>
+                            <div class="title-underline"></div>
+                        </div>
+                    </div>
+
+                    <!-- 场次表格 -->
+                    <div class="schedule-table-container" v-if="schedules.length > 0">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>影片名称</th>
+                                    <th>开始时间</th>
+                                    <th>放映厅</th>
+                                    <th>价格</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="schedule in schedules" :key="schedule.id">
+                                    <td v-text="schedule.movie_name"></td>
+                                    <td v-text="formatDateTime(schedule.start_time)"></td>
+                                    <td v-text="schedule.hall"></td>
+                                    <td v-text="schedule.price + '元'"></td>
+                                    <td>
+                                        <button class="action-btn buy-btn" @click="chooseSeat(schedule.id)">选座</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="empty-schedule" v-else>
+                        <p>该影片暂无场次安排！</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/choose_schedule.js"></script>
+</body>
+</html>

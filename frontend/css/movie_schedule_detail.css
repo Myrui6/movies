@@ -1,0 +1,328 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 顶部导航栏 */
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 0 40px;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.welcome {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 导航菜单 */
+.nav-menu {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #34495e;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 0;
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.nav-item:hover {
+    color: #3498db;
+    transform: translateY(-1px);
+}
+
+.nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: #3498db;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.nav-item:hover::after {
+    width: 100%;
+}
+
+/* 主要内容区域 */
+.main-content {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.movie-detail-container {
+    width: 100%;
+    max-width: 900px;
+}
+
+/* 影片详情卡片 */
+.movie-detail-card {
+    background: #fafafa; /* 改为纯浅灰色 */
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    gap: 40px;
+    margin-bottom: 30px; /* 添加底部间距 */
+}
+
+/* 左侧海报区域 */
+.poster-section {
+    flex-shrink: 0;
+}
+
+.movie-poster {
+    width: 280px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.no-poster-large {
+    width: 280px;
+    height: 400px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #7f8c8d;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* 右侧信息区域 */
+.info-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.info-item label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 16px;
+    min-width: 100px;
+    flex-shrink: 0;
+}
+
+.info-item span {
+    color: #34495e;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.full-width {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.full-width label {
+    margin-bottom: 10px;
+}
+
+.brief-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    line-height: 1.6;
+    color: #2c3e50;
+    font-size: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 场次管理标题栏 */
+.schedule-header {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px 30px;
+    border-radius: 10px 10px 0 0; /* 上边圆角，下边直角 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0; /* 移除底部间距 */
+}
+
+.schedule-title h2 {
+    color: #2c3e50;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.title-underline {
+    width: 80px;
+    height: 3px;
+    background: #3498db;
+    border-radius: 2px;
+}
+
+.add-schedule-btn {
+    color: #3498db;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border: 2px solid #3498db;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: transparent;
+}
+
+.add-schedule-btn:hover {
+    background: #3498db;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+/* 在原有CSS基础上添加以下样式 */
+
+/* 场次表格容器 */
+.schedule-table-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 0 0 15px 15px; /* 下边圆角，上边直角 */
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    margin-top: 0; /* 移除顶部间距 */
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.schedule-table th {
+    background: #3498db;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.schedule-table td {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #2c3e50;
+}
+
+.schedule-table tr:hover {
+    background: #f8f9fa;
+}
+
+/* 操作按钮 */
+.action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+    transform: translateY(-1px);
+}
+
+/* 空场次提示 */
+.empty-schedule {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    margin-top: 20px;
+}
+
+.empty-schedule p {
+    color: #7f8c8d;
+    font-size: 18px;
+    line-height: 1.6;
+}
+/* 添加场次区块容器 */
+.schedule-section {
+    margin-top: 30px;
+}
+
+/* 确保标题栏和表格紧密连接 */
+.schedule-header {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px 30px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-table-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 0 0 15px 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* 空场次提示样式调整 */
+.empty-schedule {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 0 0 15px 15px;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.empty-schedule p {
+    color: #7f8c8d;
+    font-size: 18px;
+    line-height: 1.6;
+}

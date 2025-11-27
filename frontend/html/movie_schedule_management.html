@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>影院管理系统</title>
+    <link rel="stylesheet" href="../css/movie_schedule_management.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <!-- 顶部导航栏 -->
+            <header class="header">
+                <div class="welcome">欢迎进入影院！</div>
+                <nav class="nav-menu">
+                    <a href="/home" class="nav-item">排片管理</a>
+                    <a href="#" class="nav-item">订单交易</a>
+                    <a href="#" class="nav-item">统计信息</a>
+                    <a href="/" class="nav-item">退出登录</a>
+                </nav>
+            </header>
+
+            <!-- 内容标题栏 -->
+            <div class="content-header">
+                <div class="section-title">
+                    <h2>热映影片</h2>
+                    <div class="title-underline"></div>
+                </div>
+                <div class="add-movie">
+                    <a href="/add-movie" class="add-btn">添加影片</a>
+                </div>
+            </div>
+
+            <!-- 搜索栏 -->
+            <div class="search-bar">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="搜索影片..." v-model="searchKeyword" @keyup.enter="searchMovies">
+                    <button class="search-btn" @click="searchMovies">搜索</button>
+                </div>
+            </div>
+
+            <!-- 影片表格 -->
+            <main class="main-content">
+                <div class="table-container" v-if="movies.length > 0">
+                    <table class="movie-table">
+                        <thead>
+                            <tr>
+                                <th>片名</th>
+                                <th>海报</th>
+                                <th>影片类型</th>
+                                <th>地区</th>
+                                <th>放映时长</th>
+                                <th>管理</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="movie in movies" :key="movie.id">
+                                <td v-text="movie.name"></td>
+                                <td>
+                                    <img v-if="movie.picture" :src="movie.picture" class="poster-img" alt="海报">
+                                    <span v-else class="no-poster">无海报</span>
+                                </td>
+                                <td v-text="movie.type"></td>
+                                <td v-text="movie.region"></td>
+                                <td v-text="movie.time + '分钟'"></td>
+                                <td>
+                                    <!-- 修改排片按钮 -->
+                                    <button class="action-btn schedule-btn" @click="scheduleMovie(movie.id)">排片</button>
+                                    <button class="action-btn remove-btn" @click="removeMovie(movie.id, movie.name)">下架</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="empty-message" v-else>
+                    <p :class="{ 'search-not-found': searchKeyword }" v-text="searchKeyword ? '没找到哦~' : '目前暂无电影！'"></p>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/movie_schedule_management.js"></script>
+</body>
+</html>

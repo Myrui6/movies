@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户购票 - 影院管理系统</title>
+    <link rel="stylesheet" href="../css/user_buy.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <!-- 顶部导航栏 -->
+            <header class="header">
+                <div class="welcome">欢迎进入影院！</div>
+                <nav class="nav-menu">
+                    <a href="/user-buy" class="nav-item">购票</a>
+                    <a href="/my-order" class="nav-item">我的订单</a>
+                    <a href="/" class="nav-item">退出登录</a>
+                </nav>
+            </header>
+
+            <!-- 内容标题栏 -->
+            <div class="content-header">
+                <div class="section-title">
+                    <h2>热映影片</h2>
+                    <div class="title-underline"></div>
+                </div>
+            </div>
+
+            <!-- 影片表格 -->
+            <main class="main-content">
+                <div class="table-container" v-if="movies.length > 0">
+                    <table class="movie-table">
+                        <thead>
+                            <tr>
+                                <th>影片名称</th>
+                                <th>海报</th>
+                                <th>影片类型</th>
+                                <th>地区</th>
+                                <th>放映时长</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="movie in movies" :key="movie.id">
+                                <td v-text="movie.name"></td>
+                                <td>
+                                    <img v-if="movie.picture" :src="movie.picture" class="poster-img" alt="海报">
+                                    <span v-else class="no-poster">无海报</span>
+                                </td>
+                                <td v-text="movie.type"></td>
+                                <td v-text="movie.region"></td>
+                                <td v-text="movie.time + '分钟'"></td>
+                                <td>
+                                    <button class="action-btn buy-btn" @click="buyTicket(movie.id)">购票</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="empty-message" v-else>
+                    <p>还没电影排片哦~</p>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/user_buy.js"></script>
+</body>
+</html>

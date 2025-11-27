@@ -1,0 +1,107 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+.container {
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed; /* 关键：固定背景 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.login-wrapper {
+    background-color: #fff;
+    width: 100%;
+    max-width: 400px;
+    min-height: 500px;
+    border-radius: 15px;
+    padding: 40px 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.header {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 80px;
+    margin-bottom: 20px;
+    color: #333;
+}
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.input-item {
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-bottom: 2px solid #667eea;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+}
+.input-item::placeholder {
+    color: #999;
+    text-transform: uppercase;
+}
+.radio-group {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 16px;
+}
+.radio-group label {
+    margin: 0 15px;
+    cursor: pointer;
+}
+.radio-group input[type="radio"] {
+    margin-right: 5px;
+}
+.btn {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 15px;
+}
+.btn1, .btn2 {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    flex: 1;
+}
+.btn1 {
+    background: #667eea;
+    color: white;
+}
+.btn1:hover {
+    background: #5a6fd8;
+    transform: translateY(-2px);
+}
+.btn2 {
+    background: #764ba2;
+    color: white;
+}
+.btn2:hover {
+    background: #6a4190;
+    transform: translateY(-2px);
+}
+.msg {
+    text-align: center;
+    color: #d63031;
+    margin: 10px 0;
+    padding: 10px;
+    background: #ffe6e6;
+    border-radius: 5px;
+    border: 1px solid #ff7675;
+}

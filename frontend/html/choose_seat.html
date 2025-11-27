@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择座位 - 影院管理系统</title>
+    <link rel="stylesheet" href="../css/choose_seat.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <!-- 顶部导航栏 -->
+            <header class="header">
+                <div class="welcome">欢迎进入影院！</div>
+                <nav class="nav-menu">
+                    <a href="/user-buy" class="nav-item">购票</a>
+                    <a href="#" class="nav-item">我的订单</a>
+                    <a href="/" class="nav-item">退出登录</a>
+                </nav>
+            </header>
+
+            <!-- 主要内容区域 -->
+            <main class="main-content">
+                <div class="seat-container">
+                    <!-- 左侧座位图 -->
+                    <div class="seat-map-section">
+                        <div class="screen">屏幕</div>
+                        <div class="seat-map">
+                            <div class="seat-row" v-for="(row, rowIndex) in seatMap" :key="rowIndex">
+                                <div class="row-label">{{ rowIndex + 1 }}</div>
+                                <div class="seats">
+                                    <div
+                                        v-for="(seat, colIndex) in row"
+                                        :key="colIndex"
+                                        class="seat"
+                                        :class="{
+                                            'sold': seat.state === 1,
+                                            'selected': seat.selected,
+                                            'available': seat.state === 0 && !seat.selected
+                                        }"
+                                        @click="toggleSeat(seat)"
+                                    >
+                                        {{ colIndex + 1 }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="seat-legend">
+                            <div class="legend-item">
+                                <div class="color-box available"></div>
+                                <span>可选</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box sold"></div>
+                                <span>已售出</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box selected"></div>
+                                <span>已选择</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧信息 -->
+                    <div class="info-section">
+                        <div class="info-card">
+                            <h3>订单信息</h3>
+                            <div class="info-item">
+                                <label>用户名：</label>
+                                <span>{{ username }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>影片名：</label>
+                                <span>{{ scheduleInfo.movie_name }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>开始时间：</label>
+                                <span>{{ formatDateTime(scheduleInfo.start_time) }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>放映厅：</label>
+                                <span>{{ scheduleInfo.hall }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>座位号：</label>
+                                <span>{{ selectedSeatsText }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>票数：</label>
+                                <span>{{ selectedSeatsCount }}张</span>
+                            </div>
+                            <div class="info-item">
+                                <label>总票价：</label>
+                                <span class="total-price">{{ totalPrice }}元</span>
+                            </div>
+                            <button class="confirm-btn" @click="confirmPurchase">确定购买</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/choose_seat.js"></script>
+</body>
+</html>
