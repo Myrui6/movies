@@ -189,3 +189,25 @@ body {
     font-size: 18px;
     line-height: 1.6;
 }
+
+/* 在原有CSS文件末尾添加以下样式 */
+
+/* 退票处理中状态 */
+.refund-processing {
+    color: #f39c12;
+    font-weight: 600;
+    padding: 6px 12px;
+    background: #fef5e7;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* 已退票状态 */
+.refunded {
+    color: #7f8c8d;
+    font-weight: 600;
+    padding: 6px 12px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-size: 14px;
+}

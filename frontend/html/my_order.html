@@ -11,15 +11,14 @@
     <div id="app">
         <div class="container">
             <!-- 顶部导航栏 -->
-            <!-- 修改顶部导航栏的欢迎信息 -->
-<header class="header">
-    <div class="welcome">欢迎 {{ username }} 进入影院！</div>
-    <nav class="nav-menu">
-        <a href="/user-buy" class="nav-item">购票</a>
-        <a href="/my-order" class="nav-item">我的订单</a>
-        <a href="/" class="nav-item">退出登录</a>
-    </nav>
-</header>
+            <header class="header">
+                <div class="welcome">欢迎 {{ username }} 进入影院！</div>
+                <nav class="nav-menu">
+                    <a href="/user-buy" class="nav-item">购票</a>
+                    <a href="/my-order" class="nav-item">我的订单</a>
+                    <a href="/" class="nav-item">退出登录</a>
+                </nav>
+            </header>
 
             <!-- 内容标题栏 -->
             <div class="content-header">
@@ -57,13 +56,26 @@
                                     <span :class="getStatusClass(order.state)" v-text="getStatusText(order.state)"></span>
                                 </td>
                                 <td>
+                                    <!-- 修改：根据状态显示不同内容 -->
                                     <button
+                                        v-if="canApplyRefund(order.state)"
                                         class="action-btn refund-btn"
                                         @click="applyRefund(order.id)"
-                                        :disabled="order.state !== 0"
                                     >
                                         申请退票
                                     </button>
+                                    <span
+                                        v-else-if="order.state === 1"
+                                        class="refund-processing"
+                                    >
+                                        退票处理中
+                                    </span>
+                                    <span
+                                        v-else-if="order.state === 2"
+                                        class="refunded"
+                                    >
+                                        已退票
+                                    </span>
                                 </td>
                             </tr>
                         </tbody>

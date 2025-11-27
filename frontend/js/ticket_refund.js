@@ -54,12 +54,27 @@ createApp({
             }
 
             try {
-                // 后续实现退票提交功能
-                alert('退票申请提交成功！\n订单编号：' + this.orderId + '\n原因：' + this.reason);
-                // 暂时跳转回订单页面
-                window.location.href = '/my-order';
+                const response = await fetch(`/api/orders/${this.orderId}/refund`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        reason: this.reason
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('退票申请提交成功！');
+                    window.location.href = '/my-order';
+                } else {
+                    alert('提交失败：' + result.message);
+                }
             } catch (error) {
-                alert('提交失败，请重试');
+                console.error('提交错误:', error);
+                alert('网络错误，请重试');
             }
         }
     }

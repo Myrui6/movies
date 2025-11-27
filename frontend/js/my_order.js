@@ -73,6 +73,11 @@ createApp({
                 // 跳转到退票页面，传递订单ID
                 window.location.href = `/ticket-refund?order_id=${orderId}`;
             }
+        },
+
+        // 新增：根据状态判断是否显示退票按钮
+        canApplyRefund(state) {
+            return state === 0; // 只有状态为0（已完成）才能申请退票
         }
     }
 }).mount('#app');
