@@ -5,7 +5,7 @@ from routes.movies import movies_bp
 from routes.schedules import schedules_bp  # 新增导入
 from routes.seats import seats_bp
 from routes.orders import orders_bp  # 新增导入
-
+from routes.halls import halls_bp
 import os
 
 app = Flask(__name__)
@@ -19,6 +19,8 @@ app.register_blueprint(schedules_bp)
 app.register_blueprint(seats_bp) # 新增注册
 # 注册蓝图
 app.register_blueprint(orders_bp)  # 新增注册
+
+app.register_blueprint(halls_bp)
 
 # 创建上传目录
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
@@ -84,6 +86,10 @@ def ticket_refund():
 @app.route('/all-orders')
 def all_orders():
     return send_from_directory('frontend/html', 'all_orders.html')
+
+@app.route('/hall-management') # <<< 新增影厅管理路由
+def hall_management():
+    return send_from_directory('frontend/html', 'hall_management.html')
 
 if __name__ == '__main__':
     print(f"上传目录: {UPLOAD_FOLDER}")

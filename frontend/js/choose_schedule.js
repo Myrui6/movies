@@ -53,16 +53,19 @@ createApp({
 
                 if (!movieId) return;
 
-                const response = await fetch(`/api/schedules?movie_id=${movieId}`);
+                // 修改这里：使用正确的API端点获取特定电影的场次
+                const response = await fetch(`/api/schedules/movie/${movieId}`);
                 const result = await response.json();
 
                 if (result.success) {
                     this.schedules = result.data;
                 } else {
                     console.error('加载场次失败:', result.message);
+                    this.schedules = [];
                 }
             } catch (error) {
                 console.error('网络错误:', error);
+                this.schedules = [];
             }
         },
 

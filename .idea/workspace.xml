@@ -5,14 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb91192d-1f34-40c2-a7b2-47e0817bb169" name="Changes" comment="搜索影片接口">
-      <change afterPath="$PROJECT_DIR$/frontend/css/all_orders.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/html/all_orders.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/js/all_orders.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/css/hall_management.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/html/hall_management.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/js/hall_management.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/routes/halls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/html/add_movie.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/html/add_movie.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/html/add_schedule.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/html/add_schedule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/html/all_orders.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/html/all_orders.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/html/movie_schedule_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/html/movie_schedule_detail.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/html/movie_schedule_management.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/html/movie_schedule_management.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/js/add_schedule.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/add_schedule.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/js/all_orders.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/all_orders.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/js/choose_schedule.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/choose_schedule.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/js/choose_seat.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/choose_seat.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/js/movie_schedule_detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/movie_schedule_detail.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/orders.py" beforeDir="false" afterPath="$PROJECT_DIR$/routes/orders.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/schedules.py" beforeDir="false" afterPath="$PROJECT_DIR$/routes/schedules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/seats.py" beforeDir="false" afterPath="$PROJECT_DIR$/routes/seats.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +62,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Myrui6/movies&quot;,
+    &quot;url&quot;: &quot;https://github.com/Myrui6/movies.git&quot;,
     &quot;accountId&quot;: &quot;6fc1f6b2-bd7b-4a8c-b2ed-16e841537cbb&quot;
   }
 }</component>
@@ -139,6 +150,11 @@
       <updated>1764140266809</updated>
       <workItem from="1764140267918" duration="28955000" />
       <workItem from="1764217489906" duration="6879000" />
+      <workItem from="1764766770904" duration="2780000" />
+      <workItem from="1764838385652" duration="5131000" />
+      <workItem from="1764848738387" duration="3016000" />
+      <workItem from="1764853868956" duration="1364000" />
+      <workItem from="1764857169984" duration="7138000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -196,6 +212,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="搜索影片接口" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/movies$Flask__app_py_.coverage" NAME="Flask (app.py) Coverage Results" MODIFIED="1764234637291" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/movies$Flask__app_py_.coverage" NAME="Flask (app.py) Coverage Results" MODIFIED="1764863623382" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

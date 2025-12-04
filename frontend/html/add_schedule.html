@@ -10,21 +10,19 @@
 <body>
     <div id="app">
         <div class="container">
-            <!-- 顶部导航栏 -->
             <header class="header">
                 <div class="welcome">欢迎进入影院！</div>
                 <nav class="nav-menu">
                     <a href="/home" class="nav-item">排片管理</a>
-                    <a href="#" class="nav-item">订单交易</a>
-                    <a href="#" class="nav-item">统计信息</a>
-                    <a href="/" class="nav-item">退出登录</a>
+                    <a href="/all-orders" class="nav-item">订单交易</a>
+                    <a href="/hall-management" class="nav-item">影厅管理</a> <a href="/" class="nav-item">退出登录</a>
                 </nav>
             </header>
 
-            <!-- 表单区域 -->
             <main class="main-content">
                 <div class="form-container">
                     <h2 class="form-title">添加场次</h2>
+                    <div v-if="message" class="alert-message">{{ message }}</div>
                     <form class="schedule-form" @submit.prevent="submitForm">
                         <div class="form-group">
                             <label for="movieName">影片名称</label>
@@ -38,19 +36,14 @@
 
                         <div class="form-group">
                             <label for="hall">放映影厅</label>
-                            <input type="text" id="hall" class="form-input" v-model="formData.hall" required>
+                            <select id="hall" class="form-input" v-model="formData.hall_id" required>
+                                <option value="" disabled>请选择一个影厅</option>
+                                <option v-for="hall in halls" :key="hall.id" :value="hall.id">
+                                    {{ hall.name }} ({{ hall.total_rows }}行 x {{ hall.total_columns }}列)
+                                </option>
+                            </select>
+                            <p v-if="halls.length === 0 && !message" style="color:#e74c3c; font-size:12px;">暂无可用影厅，请先添加影厅。</p>
                         </div>
-
-                        <!-- 修改座位行数和列数的字段名 -->
-<div class="form-group">
-    <label for="rows">座位行数</label>
-    <input type="number" id="rows" class="form-input" v-model="formData.seat_rows" required min="1">
-</div>
-
-<div class="form-group">
-    <label for="columns">座位列数</label>
-    <input type="number" id="columns" class="form-input" v-model="formData.seat_columns" required min="1">
-</div>
 
                         <div class="form-group">
                             <label for="price">售票价格（元）</label>

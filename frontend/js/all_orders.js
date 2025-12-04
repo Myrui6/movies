@@ -133,9 +133,64 @@ createApp({
             return date.toLocaleString('zh-CN');
         },
 
-        processRefund(orderId) {
-            // 后续实现退票处理功能
-            alert(`处理订单 ${orderId} 的退票申请`);
+// 修改：处理退票申请
+async processRefund(orderId, reason) {
+    // 显示退票原因和操作确认
+    const userChoice = confirm(`退票原因：${reason || '无说明'}\n\n请选择操作：\n点击"确定"同意退票\n点击"取消"拒绝退票`);
+
+    if (userChoice) {
+        // 用户点击"确定" - 同意退票
+        try {
+            const response = await fetch(`/api/orders/${orderId}/process-refund`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'approve'
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert(result.message);
+                // 重新加载订单列表以更新状态
+                this.loadAllOrders();
+            } else {
+                alert('操作失败：' + result.message);
+            }
+        } catch (error) {
+            console.error('处理退票错误:', error);
+            alert('网络错误，请重试');
         }
+    } else {
+        // 用户点击"取消" - 拒绝退票
+        try {
+            const response = await fetch(`/api/orders/${orderId}/process-refund`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'reject'
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert(result.message);
+                // 重新加载订单列表（虽然状态未变，但需要重新加载以显示最新数据）
+                this.loadAllOrders();
+            } else {
+                alert('操作失败：' + result.message);
+            }
+        } catch (error) {
+            console.error('处理退票错误:', error);
+            alert('网络错误，请重试');
+        }
+    }
+}
     }
 }).mount('#app');

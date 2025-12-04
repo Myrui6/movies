@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>影厅管理 - 影院管理系统</title>
+    <link rel="stylesheet" href="../css/hall_management.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <header class="header">
+                <div class="welcome">欢迎进入影院！</div>
+                <nav class="nav-menu">
+                    <a href="/home" class="nav-item">排片管理</a>
+                    <a href="/all-orders" class="nav-item">订单交易</a>
+                    <a href="/hall-management" class="nav-item nav-active">影厅管理</a> <a href="/" class="nav-item">退出登录</a>
+                </nav>
+            </header>
+
+            <div class="content-header">
+                <div class="section-title">
+                    <h2>在线影厅</h2>
+                    <div class="title-underline"></div>
+                </div>
+                <div class="add-hall">
+                    <button @click="showAddRow" class="add-btn">添加影厅</button>
+                </div>
+            </div>
+
+            <main class="main-content">
+                <div class="table-container">
+                    <table class="hall-table">
+                        <thead>
+                            <tr>
+                                <th>影厅名</th>
+                                <th>座位行数</th>
+                                <th>座位列数</th>
+                                <th>管理</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-if="isAdding">
+                                <td><input type="text" v-model="newHall.name" placeholder="输入影厅名" class="input-inline"></td>
+                                <td><input type="number" v-model="newHall.total_rows" min="1" class="input-inline"></td>
+                                <td><input type="number" v-model="newHall.total_columns" min="1" class="input-inline"></td>
+                                <td>
+                                    <button class="action-btn confirm-btn" @click="addHall">确定</button>
+                                    <button class="action-btn cancel-btn" @click="cancelAdd">取消</button>
+                                </td>
+                            </tr>
+
+                            <tr v-for="hall in halls" :key="hall.id">
+                                <td v-text="hall.name"></td>
+                                <td v-text="hall.total_rows"></td>
+                                <td v-text="hall.total_columns"></td>
+                                <td>
+                                    <button class="action-btn delete-btn" @click="deleteHall(hall.id, hall.name)">删除</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="empty-message" v-if="!halls.length && !isAdding">
+                    <p>目前暂无影厅信息！</p>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/hall_management.js"></script>
+</body>
+</html>

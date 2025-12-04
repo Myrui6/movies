@@ -11,7 +11,8 @@ createApp({
                 price: 0
             },
             seatMap: [],
-            selectedSeats: []
+            selectedSeats: [],
+            scheduleId: null
         }
     },
     computed: {
@@ -53,6 +54,7 @@ createApp({
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const scheduleId = urlParams.get('schedule_id');
+                this.scheduleId = scheduleId;
 
                 if (!scheduleId) {
                     alert('无效的场次ID');
@@ -77,12 +79,9 @@ createApp({
 
         async loadSeats() {
             try {
-                const urlParams = new URLSearchParams(window.location.search);
-                const scheduleId = urlParams.get('schedule_id');
+                if (!this.scheduleId) return;
 
-                if (!scheduleId) return;
-
-                const response = await fetch(`/api/seats?schedule_id=${scheduleId}`);
+                const response = await fetch(`/api/seats?schedule_id=${this.scheduleId}`);
                 const result = await response.json();
 
                 if (result.success) {
@@ -108,7 +107,7 @@ createApp({
                         row: i + 1,
                         col: j + 1,
                         state: seat ? seat.state : 0,
-                        selected: false
+                        selected: this.selectedSeats.some(s => s.row === i + 1 && s.col === j + 1)
                     });
                 }
                 this.seatMap.push(row);
@@ -116,7 +115,8 @@ createApp({
         },
 
         toggleSeat(seat) {
-            if (seat.state === 1) return;
+            // 只能选择状态为0（可选）的座位
+            if (seat.state !== 0) return;
 
             seat.selected = !seat.selected;
 
@@ -142,16 +142,13 @@ createApp({
             }
 
             try {
-                const urlParams = new URLSearchParams(window.location.search);
-                const scheduleId = urlParams.get('schedule_id');
-
                 const orderData = {
                     movie_name: this.scheduleInfo.movie_name,
                     start_time: this.scheduleInfo.start_time,
                     hall: this.scheduleInfo.hall,
                     seat: this.selectedSeatsText,
-                    total_price: parseInt(this.totalPrice),
-                    schedule_id: scheduleId,
+                    total_price: parseFloat(this.totalPrice),
+                    schedule_id: parseInt(this.scheduleId),
                     selected_seats: this.selectedSeats
                 };
 
@@ -172,6 +169,7 @@ createApp({
                     alert('购票失败：' + result.message);
                 }
             } catch (error) {
+                console.error('购票错误:', error);
                 alert('网络错误，请重试');
             }
         }

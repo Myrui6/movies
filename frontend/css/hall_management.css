@@ -1,0 +1,221 @@
+/* 基础样式和重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 顶部导航栏 (Header) - 保持一致 */
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 0 40px;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.welcome {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-menu {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #555;
+    font-size: 16px;
+    padding: 5px 0;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-item:hover, .nav-active {
+    color: #3498db;
+    font-weight: bold;
+}
+
+.nav-active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background-color: #3498db;
+    border-radius: 2px;
+}
+
+/* 内容标题栏 (Content Header) - 布局与 movie_schedule_management.css 一致 */
+.content-header {
+    background: rgba(255, 255, 255, 0.9); /* 改为与all-orders相同的浅色背景 */
+    padding: 20px 40px; /* 调整内边距与all-orders一致 */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* 添加底部边框 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* 添加底部空隙 */
+}
+
+.section-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.section-title h2 {
+    color: #2c3e50; /* 深灰色，与all-orders一致 */
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* 浅蓝色横线 */
+.title-underline {
+    width: 80px;
+    height: 3px;
+    background: #3498db;
+    border-radius: 2px;
+}
+
+/* 添加影厅按钮 (add-hall 容器和 add-btn 按钮) - 样式与 movie_schedule_management.css 中的 .add-movie .add-btn 保持一致 */
+.add-hall .add-btn {
+    color: #3498db;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border: 2px solid #3498db;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    background: transparent;
+}
+
+.add-hall .add-btn:hover {
+    background: #3498db;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+.content-header + .main-content {
+    margin-top: 20px; /* 在标题栏和主要内容之间添加空隙 */
+}
+
+/* 主要内容区域 */
+.main-content {
+    padding: 0 60px 40px;
+    flex-grow: 1;
+}
+/* ... (表格样式保持不变) ... */
+
+/* 表格容器和样式 */
+.table-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.hall-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.hall-table th {
+    background: #3498db;
+    color: white;
+    padding: 18px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.hall-table td {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #2c3e50;
+    vertical-align: middle;
+}
+
+.hall-table tr:hover:not(:first-child) {
+    background: #f8f9fa;
+}
+
+/* 行内输入框样式 */
+.input-inline {
+    width: 90%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* 动作按钮样式 */
+.action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+}
+
+.confirm-btn {
+    background: #27ae60;
+    color: white;
+}
+
+.confirm-btn:hover {
+    background: #219d55;
+    transform: translateY(-1px);
+}
+
+.delete-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+    transform: translateY(-1px);
+}
+
+.cancel-btn {
+    background: #95a5a6;
+    color: white;
+}
+.cancel-btn:hover {
+    background: #7f8c8d;
+    transform: translateY(-1px);
+}
+
+/* 空消息提示 */
+.empty-message {
+    text-align: center;
+    padding: 40px;
+    color: white;
+    font-size: 18px;
+}

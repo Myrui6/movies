@@ -16,7 +16,7 @@
                 <nav class="nav-menu">
                     <a href="/home" class="nav-item">排片管理</a>
                     <a href="/all-orders" class="nav-item">订单交易</a>
-                    <a href="#" class="nav-item">统计信息</a>
+                    <a href="/hall-management" class="nav-item">影厅管理</a>
                     <a href="/" class="nav-item">退出登录</a>
                 </nav>
             </header>
@@ -96,7 +96,7 @@
                                     <span :class="getStatusClass(order.state)" v-text="getStatusText(order.state)"></span>
                                 </td>
                                 <td>
-                                    <button v-if="order.state === 1" class="action-btn process-btn" @click="processRefund(order.id)">退票处理</button>
+                                    <button v-if="order.state === 1" class="action-btn process-btn" @click="processRefund(order.id, order.reason)">退票处理</button>
                                     <span v-else-if="order.state === 0" class="status-text completed">已完成</span>
                                     <span v-else-if="order.state === 2" class="status-text refunded">退票完成</span>
                                 </td>
