@@ -21,7 +21,7 @@ A comprehensive cinema management system built with Flask backend and Vue.js fro
 ```sql
 CREATE DATABASE movies;
 ```
-Import your database schema or create tables based on your design.
+Create your database schema with `schema.sql` .
 
 ### 3. Configure Environment
 Edit `config.py`:
