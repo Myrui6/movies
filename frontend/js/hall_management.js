@@ -4,11 +4,11 @@ createApp({
     data() {
         return {
             halls: [],
-            isAdding: false, // 控制行内添加表单是否显示
+            isAdding: false,
             newHall: {
                 name: '',
-                total_rows: 10, // 默认值
-                total_columns: 15 // 默认值
+                total_rows: 10,
+                total_columns: 15
             }
         }
     },
@@ -24,16 +24,15 @@ createApp({
                 if (result.success) {
                     this.halls = result.data;
                 } else {
-                    alert('加载影厅列表失败：' + result.message);
+                    alert('Failed to load hall list: ' + result.message);
                 }
             } catch (error) {
-                alert('网络错误，请重试');
-                console.error('加载影厅错误:', error);
+                alert('Network error, please try again');
+                console.error('Load hall error:', error);
             }
         },
 
         showAddRow() {
-            // 显示行内添加表单，并重置数据
             this.isAdding = true;
             this.newHall = {
                 name: '',
@@ -50,12 +49,12 @@ createApp({
             const { name, total_rows, total_columns } = this.newHall;
 
             if (!name || !total_rows || !total_columns) {
-                alert('请填写所有影厅信息');
+                alert('Please fill all hall information');
                 return;
             }
 
             if (total_rows <= 0 || total_columns <= 0) {
-                alert('行数和列数必须大于0');
+                alert('Rows and columns must be greater than 0');
                 return;
             }
 
@@ -71,20 +70,20 @@ createApp({
                 const result = await response.json();
 
                 if (result.success) {
-                    alert('影厅添加成功！');
-                    this.isAdding = false; // 隐藏添加行
-                    this.loadHalls(); // 重新加载列表
+                    alert('Hall added successfully!');
+                    this.isAdding = false;
+                    this.loadHalls();
                 } else {
-                    alert('添加失败：' + result.message);
+                    alert('Failed to add: ' + result.message);
                 }
             } catch (error) {
-                alert('网络错误，请重试');
-                console.error('添加影厅错误:', error);
+                alert('Network error, please try again');
+                console.error('Add hall error:', error);
             }
         },
 
         async deleteHall(hallId, hallName) {
-            if (confirm(`确定要删除影厅「${hallName}」吗？\n\n注意：如果该影厅下有排片场次，将无法删除。`)) {
+            if (confirm(`Are you sure to delete hall "${hallName}"?\n\nNote: If there are scheduled screenings in this hall, it cannot be deleted.`)) {
                 try {
                     const response = await fetch(`/api/halls/${hallId}`, {
                         method: 'DELETE'
@@ -94,13 +93,13 @@ createApp({
 
                     if (result.success) {
                         alert(result.message);
-                        this.loadHalls(); // 重新加载列表
+                        this.loadHalls();
                     } else {
-                        alert('删除失败：' + result.message);
+                        alert('Delete failed: ' + result.message);
                     }
                 } catch (error) {
-                    alert('网络错误，请重试');
-                    console.error('删除影厅错误:', error);
+                    alert('Network error, please try again');
+                    console.error('Delete hall error:', error);
                 }
             }
         }

@@ -13,9 +13,9 @@ createApp({
             dateOptions: [],
             hallOptions: [],
             statusOptions: [
-                { value: '0', label: '已完成' },
-                { value: '1', label: '申请退票中' },
-                { value: '2', label: '退票完成' }
+                { value: '0', label: 'Completed' },
+                { value: '1', label: 'Refund Requested' },
+                { value: '2', label: 'Refunded' }
             ],
             orders: [],
             currentPage: 1,
@@ -47,10 +47,10 @@ createApp({
                     this.dateOptions = result.data.dates || [];
                     this.hallOptions = result.data.halls || [];
                 } else {
-                    console.error('加载筛选选项失败:', result.message);
+                    console.error('Failed to load filter options:', result.message);
                 }
             } catch (error) {
-                console.error('网络错误:', error);
+                console.error('Network error:', error);
             }
         },
 
@@ -63,11 +63,11 @@ createApp({
                     this.orders = result.data;
                     this.currentPage = 1;
                 } else {
-                    console.error('加载订单失败:', result.message);
+                    console.error('Failed to load orders:', result.message);
                     this.orders = [];
                 }
             } catch (error) {
-                console.error('网络错误:', error);
+                console.error('Network error:', error);
                 this.orders = [];
             }
         },
@@ -87,34 +87,31 @@ createApp({
                     this.orders = result.data;
                     this.currentPage = 1;
                 } else {
-                    console.error('搜索订单失败:', result.message);
+                    console.error('Failed to search orders:', result.message);
                     this.orders = [];
                 }
             } catch (error) {
-                console.error('网络错误:', error);
+                console.error('Network error:', error);
                 this.orders = [];
             }
         },
 
-        // 检查日期是否在可用日期列表中（仅用于显示提示，不限制选择）
         isDateAvailable(date) {
             return this.dateOptions.includes(date);
         },
 
-        // 分页方法
         changePage(page) {
             if (page >= 1 && page <= this.totalPages) {
                 this.currentPage = page;
             }
         },
 
-        // 状态显示方法
         getStatusText(state) {
             switch(state) {
-                case 0: return '已完成';
-                case 1: return '申请退票中';
-                case 2: return '退票完成';
-                default: return '未知状态';
+                case 0: return 'Completed';
+                case 1: return 'Refund Requested';
+                case 2: return 'Refunded';
+                default: return 'Unknown Status';
             }
         },
 
@@ -130,67 +127,61 @@ createApp({
         formatDateTime(datetimeStr) {
             if (!datetimeStr) return '';
             const date = new Date(datetimeStr);
-            return date.toLocaleString('zh-CN');
+            return date.toLocaleString();
         },
 
-// 修改：处理退票申请
-async processRefund(orderId, reason) {
-    // 显示退票原因和操作确认
-    const userChoice = confirm(`退票原因：${reason || '无说明'}\n\n请选择操作：\n点击"确定"同意退票\n点击"取消"拒绝退票`);
+        async processRefund(orderId, reason) {
+            const userChoice = confirm(`Refund reason: ${reason || 'No description'}\n\nPlease choose action:\nClick "OK" to approve refund\nClick "Cancel" to reject refund`);
 
-    if (userChoice) {
-        // 用户点击"确定" - 同意退票
-        try {
-            const response = await fetch(`/api/orders/${orderId}/process-refund`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'approve'
-                })
-            });
+            if (userChoice) {
+                try {
+                    const response = await fetch(`/api/orders/${orderId}/process-refund`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'approve'
+                        })
+                    });
 
-            const result = await response.json();
+                    const result = await response.json();
 
-            if (result.success) {
-                alert(result.message);
-                // 重新加载订单列表以更新状态
-                this.loadAllOrders();
+                    if (result.success) {
+                        alert(result.message);
+                        this.loadAllOrders();
+                    } else {
+                        alert('Operation failed: ' + result.message);
+                    }
+                } catch (error) {
+                    console.error('Refund processing error:', error);
+                    alert('Network error, please try again');
+                }
             } else {
-                alert('操作失败：' + result.message);
-            }
-        } catch (error) {
-            console.error('处理退票错误:', error);
-            alert('网络错误，请重试');
-        }
-    } else {
-        // 用户点击"取消" - 拒绝退票
-        try {
-            const response = await fetch(`/api/orders/${orderId}/process-refund`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'reject'
-                })
-            });
+                try {
+                    const response = await fetch(`/api/orders/${orderId}/process-refund`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'reject'
+                        })
+                    });
 
-            const result = await response.json();
+                    const result = await response.json();
 
-            if (result.success) {
-                alert(result.message);
-                // 重新加载订单列表（虽然状态未变，但需要重新加载以显示最新数据）
-                this.loadAllOrders();
-            } else {
-                alert('操作失败：' + result.message);
+                    if (result.success) {
+                        alert(result.message);
+                        this.loadAllOrders();
+                    } else {
+                        alert('Operation failed: ' + result.message);
+                    }
+                } catch (error) {
+                    console.error('Refund processing error:', error);
+                    alert('Network error, please try again');
+                }
             }
-        } catch (error) {
-            console.error('处理退票错误:', error);
-            alert('网络错误，请重试');
         }
-    }
-}
     }
 }).mount('#app');

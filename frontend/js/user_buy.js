@@ -21,11 +21,11 @@ createApp({
                 if (result.success) {
                     this.username = result.data.username;
                 } else {
-                    console.error('获取用户信息失败:', result.message);
+                    console.error('Failed to get user info:', result.message);
                     window.location.href = '/';
                 }
             } catch (error) {
-                console.error('网络错误:', error);
+                console.error('Network error:', error);
                 window.location.href = '/';
             }
         },
@@ -36,7 +36,6 @@ createApp({
                 const result = await response.json();
 
                 if (result.success) {
-                    // 如果有搜索关键词，过滤结果
                     if (this.searchKeyword) {
                         const keyword = this.searchKeyword.toLowerCase();
                         this.movies = result.data.filter(movie =>
@@ -46,11 +45,11 @@ createApp({
                         this.movies = result.data;
                     }
                 } else {
-                    console.error('加载影片失败:', result.message);
+                    console.error('Failed to load movies:', result.message);
                     this.movies = [];
                 }
             } catch (error) {
-                console.error('网络错误:', error);
+                console.error('Network error:', error);
                 this.movies = [];
             }
         },

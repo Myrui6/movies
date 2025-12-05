@@ -23,8 +23,8 @@ createApp({
             return (this.selectedSeatsCount * this.scheduleInfo.price).toFixed(2);
         },
         selectedSeatsText() {
-            if (this.selectedSeats.length === 0) return '未选择';
-            return this.selectedSeats.map(seat => `${seat.row}排${seat.col}座`).join(', ');
+            if (this.selectedSeats.length === 0) return 'Not selected';
+            return this.selectedSeats.map(seat => `Row ${seat.row} Seat ${seat.col}`).join(', ');
         }
     },
     mounted() {
@@ -41,11 +41,11 @@ createApp({
                 if (result.success) {
                     this.username = result.data.username;
                 } else {
-                    console.error('获取用户信息失败:', result.message);
+                    console.error('Failed to get user info:', result.message);
                     window.location.href = '/';
                 }
             } catch (error) {
-                console.error('网络错误:', error);
+                console.error('Network error:', error);
                 window.location.href = '/';
             }
         },
@@ -57,7 +57,7 @@ createApp({
                 this.scheduleId = scheduleId;
 
                 if (!scheduleId) {
-                    alert('无效的场次ID');
+                    alert('Invalid schedule ID');
                     window.location.href = '/user-buy';
                     return;
                 }
@@ -68,11 +68,11 @@ createApp({
                 if (result.success) {
                     this.scheduleInfo = result.data;
                 } else {
-                    alert('加载场次信息失败：' + result.message);
+                    alert('Failed to load schedule info: ' + result.message);
                     window.location.href = '/user-buy';
                 }
             } catch (error) {
-                alert('网络错误，请重试');
+                alert('Network error, please try again');
                 window.location.href = '/user-buy';
             }
         },
@@ -87,10 +87,10 @@ createApp({
                 if (result.success) {
                     this.initializeSeatMap(result.data);
                 } else {
-                    console.error('加载座位失败:', result.message);
+                    console.error('Failed to load seats:', result.message);
                 }
             } catch (error) {
-                console.error('网络错误:', error);
+                console.error('Network error:', error);
             }
         },
 
@@ -115,7 +115,6 @@ createApp({
         },
 
         toggleSeat(seat) {
-            // 只能选择状态为0（可选）的座位
             if (seat.state !== 0) return;
 
             seat.selected = !seat.selected;
@@ -132,12 +131,12 @@ createApp({
         formatDateTime(datetimeStr) {
             if (!datetimeStr) return '';
             const date = new Date(datetimeStr);
-            return date.toLocaleString('zh-CN');
+            return date.toLocaleString();
         },
 
         async confirmPurchase() {
             if (this.selectedSeatsCount === 0) {
-                alert('请先选择座位');
+                alert('Please select seats first');
                 return;
             }
 
@@ -163,14 +162,14 @@ createApp({
                 const result = await response.json();
 
                 if (result.success) {
-                    alert('购票成功！');
+                    alert('Purchase successful!');
                     window.location.href = `/my-order`;
                 } else {
-                    alert('购票失败：' + result.message);
+                    alert('Purchase failed: ' + result.message);
                 }
             } catch (error) {
-                console.error('购票错误:', error);
-                alert('网络错误，请重试');
+                console.error('Purchase error:', error);
+                alert('Network error, please try again');
             }
         }
     }

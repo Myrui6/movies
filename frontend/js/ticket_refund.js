@@ -21,11 +21,11 @@ createApp({
                 if (result.success) {
                     this.username = result.data.username;
                 } else {
-                    console.error('获取用户信息失败:', result.message);
+                    console.error('Failed to get user info:', result.message);
                     window.location.href = '/';
                 }
             } catch (error) {
-                console.error('网络错误:', error);
+                console.error('Network error:', error);
                 window.location.href = '/';
             }
         },
@@ -36,7 +36,7 @@ createApp({
             if (orderId) {
                 this.orderId = orderId;
             } else {
-                alert('无效的订单ID');
+                alert('Invalid order ID');
                 window.location.href = '/my-order';
             }
         },
@@ -49,7 +49,7 @@ createApp({
 
         async submitRefund() {
             if (!this.reason.trim()) {
-                alert('请输入退票原因');
+                alert('Please enter refund reason');
                 return;
             }
 
@@ -67,14 +67,14 @@ createApp({
                 const result = await response.json();
 
                 if (result.success) {
-                    alert('退票申请提交成功！');
+                    alert('Refund application submitted successfully!');
                     window.location.href = '/my-order';
                 } else {
-                    alert('提交失败：' + result.message);
+                    alert('Submission failed: ' + result.message);
                 }
             } catch (error) {
-                console.error('提交错误:', error);
-                alert('网络错误，请重试');
+                console.error('Submission error:', error);
+                alert('Network error, please try again');
             }
         }
     }

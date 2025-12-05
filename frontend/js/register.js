@@ -14,19 +14,18 @@ createApp({
         async register() {
             this.message = '';
 
-            // 验证输入
             if (!this.username || !this.password) {
-                this.message = '请输入用户名和密码';
+                this.message = 'Please enter username and password';
                 return;
             }
 
             if (this.password !== this.confirmPassword) {
-                this.message = '两次输入的密码不一致';
+                this.message = 'Passwords do not match';
                 return;
             }
 
             if (this.password.length < 6) {
-                this.message = '密码长度不能少于6位';
+                this.message = 'Password must be at least 6 characters';
                 return;
             }
 
@@ -45,7 +44,6 @@ createApp({
 
                 if (result.success) {
                     this.message = result.message;
-                    // 注册成功后延迟跳转到登录页
                     setTimeout(() => {
                         window.location.href = '/';
                     }, 1500);
@@ -53,7 +51,7 @@ createApp({
                     this.message = result.message;
                 }
             } catch (error) {
-                this.message = '网络错误，请重试';
+                this.message = 'Network error, please try again';
             }
         },
 

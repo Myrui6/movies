@@ -3,14 +3,13 @@ from database import get_db_connection
 
 seats_bp = Blueprint('seats', __name__)
 
-
 @seats_bp.route('/api/seats', methods=['GET'])
 def get_seats():
     try:
         schedule_id = request.args.get('schedule_id')
 
         if not schedule_id:
-            return jsonify({"success": False, "message": "缺少场次ID"})
+            return jsonify({"success": False, "message": "Missing schedule ID"})
 
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -26,17 +25,15 @@ def get_seats():
             seat_list.append({
                 'row_num': seat[0],
                 'col_num': seat[1],
-                'state': seat[2]  # 确保返回正确的状态：0=可选，1=已售，2=锁定
+                'state': seat[2]
             })
 
         return jsonify({"success": True, "data": seat_list})
 
     except Exception as e:
-        print(f"获取座位错误: {e}")
-        return jsonify({"success": False, "message": f"获取座位失败: {str(e)}"})
+        print(f"Get seats error: {e}")
+        return jsonify({"success": False, "message": f"Get seats failed: {str(e)}"})
 
-
-# 在 seats.py 中添加以下函数
 @seats_bp.route('/api/seats/lock', methods=['POST'])
 def lock_seat():
     try:
@@ -46,12 +43,11 @@ def lock_seat():
         col_num = data.get('col')
 
         if not all([schedule_id, row_num, col_num]):
-            return jsonify({"success": False, "message": "缺少必要参数"})
+            return jsonify({"success": False, "message": "Missing required parameters"})
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 检查座位是否可用（state=0）
         cursor.execute("""
             SELECT state FROM seat 
             WHERE schedule_id = %s AND row_num = %s AND col_num = %s
@@ -63,14 +59,13 @@ def lock_seat():
         if not seat:
             cursor.close()
             conn.close()
-            return jsonify({"success": False, "message": "座位不存在"})
+            return jsonify({"success": False, "message": "Seat does not exist"})
 
         if seat[0] != 0:
             cursor.close()
             conn.close()
-            return jsonify({"success": False, "message": "座位不可用"})
+            return jsonify({"success": False, "message": "Seat not available"})
 
-        # 锁定座位（state=2）
         cursor.execute("""
             UPDATE seat 
             SET state = 2 
@@ -81,13 +76,13 @@ def lock_seat():
         cursor.close()
         conn.close()
 
-        return jsonify({"success": True, "message": "座位锁定成功"})
+        return jsonify({"success": True, "message": "Seat locked successfully"})
 
     except Exception as e:
         if 'conn' in locals():
             conn.rollback()
-        print(f"锁定座位错误: {e}")
-        return jsonify({"success": False, "message": f"锁定座位失败: {str(e)}"})
+        print(f"Lock seat error: {e}")
+        return jsonify({"success": False, "message": f"Lock seat failed: {str(e)}"})
 
 @seats_bp.route('/api/seats/release', methods=['POST'])
 def release_seat():
@@ -98,12 +93,11 @@ def release_seat():
         col_num = data.get('col')
 
         if not all([schedule_id, row_num, col_num]):
-            return jsonify({"success": False, "message": "缺少必要参数"})
+            return jsonify({"success": False, "message": "Missing required parameters"})
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 只释放锁定状态（state=2）的座位
         cursor.execute("""
             UPDATE seat 
             SET state = 0 
@@ -114,10 +108,10 @@ def release_seat():
         cursor.close()
         conn.close()
 
-        return jsonify({"success": True, "message": "座位释放成功"})
+        return jsonify({"success": True, "message": "Seat released successfully"})
 
     except Exception as e:
         if 'conn' in locals():
             conn.rollback()
-        print(f"释放座位错误: {e}")
-        return jsonify({"success": False, "message": f"释放座位失败: {str(e)}"})
+        print(f"Release seat error: {e}")
+        return jsonify({"success": False, "message": f"Release seat failed: {str(e)}"})

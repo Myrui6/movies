@@ -24,10 +24,10 @@ createApp({
                         this.allMovies = result.data;
                     }
                 } else {
-                    console.error('加载电影失败:', result.message);
+                    console.error('Failed to load movies:', result.message);
                 }
             } catch (error) {
-                console.error('网络错误:', error);
+                console.error('Network error:', error);
             }
         },
 
@@ -40,7 +40,7 @@ createApp({
         },
 
         async removeMovie(movieId, movieName) {
-            if (confirm(`确定要下架影片《${movieName}》吗？\n\n注意：这将同时删除该影片的所有场次信息！`)) {
+            if (confirm(`Are you sure to remove movie "${movieName}"?\n\nNote: This will also delete all schedule information for this movie!`)) {
                 try {
                     const response = await fetch(`/api/movies/${movieId}`, {
                         method: 'DELETE'
@@ -49,13 +49,13 @@ createApp({
                     const result = await response.json();
 
                     if (result.success) {
-                        alert(result.message); // 显示包含场次删除数量的消息
-                        this.loadMovies(); // 重新加载列表
+                        alert(result.message);
+                        this.loadMovies();
                     } else {
-                        alert('下架失败：' + result.message);
+                        alert('Remove failed: ' + result.message);
                     }
                 } catch (error) {
-                    alert('网络错误，请重试');
+                    alert('Network error, please try again');
                 }
             }
         }

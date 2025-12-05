@@ -1,47 +1,44 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的订单 - 影院管理系统</title>
+    <title>My Orders - Cinema Management System</title>
     <link rel="stylesheet" href="../css/my_order.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
     <div id="app">
         <div class="container">
-            <!-- 顶部导航栏 -->
             <header class="header">
-                <div class="welcome">欢迎 {{ username }} 进入影院！</div>
+                <div class="welcome">Welcome {{ username }} to Cinema!</div>
                 <nav class="nav-menu">
-                    <a href="/user-buy" class="nav-item">购票</a>
-                    <a href="/my-order" class="nav-item">我的订单</a>
-                    <a href="/" class="nav-item">退出登录</a>
+                    <a href="/user-buy" class="nav-item">Buy Tickets</a>
+                    <a href="/my-order" class="nav-item">My Orders</a>
+                    <a href="/" class="nav-item">Logout</a>
                 </nav>
             </header>
 
-            <!-- 内容标题栏 -->
             <div class="content-header">
                 <div class="section-title">
-                    <h2>订单详情</h2>
+                    <h2>Order Details</h2>
                     <div class="title-underline"></div>
                 </div>
             </div>
 
-            <!-- 订单表格 -->
             <main class="main-content">
                 <div class="table-container" v-if="orders.length > 0">
                     <table class="order-table">
                         <thead>
                             <tr>
-                                <th>影片名</th>
-                                <th>用户名</th>
-                                <th>开始时间</th>
-                                <th>放映厅</th>
-                                <th>座位号</th>
-                                <th>总票价</th>
-                                <th>订单状态</th>
-                                <th>操作</th>
+                                <th>Movie Name</th>
+                                <th>Username</th>
+                                <th>Start Time</th>
+                                <th>Hall</th>
+                                <th>Seats</th>
+                                <th>Total Price</th>
+                                <th>Order Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,30 +48,29 @@
                                 <td v-text="formatDateTime(order.start_time)"></td>
                                 <td v-text="order.hall"></td>
                                 <td v-text="order.seat"></td>
-                                <td v-text="order.total_price + '元'"></td>
+                                <td v-text="order.total_price + '￥'"></td>
                                 <td>
                                     <span :class="getStatusClass(order.state)" v-text="getStatusText(order.state)"></span>
                                 </td>
                                 <td>
-                                    <!-- 修改：根据状态显示不同内容 -->
                                     <button
                                         v-if="canApplyRefund(order.state)"
                                         class="action-btn refund-btn"
                                         @click="applyRefund(order.id)"
                                     >
-                                        申请退票
+                                        Apply Refund
                                     </button>
                                     <span
                                         v-else-if="order.state === 1"
                                         class="refund-processing"
                                     >
-                                        退票处理中
+                                        Refund Processing
                                     </span>
                                     <span
                                         v-else-if="order.state === 2"
                                         class="refunded"
                                     >
-                                        已退票
+                                        Refunded
                                     </span>
                                 </td>
                             </tr>
@@ -82,7 +78,7 @@
                     </table>
                 </div>
                 <div class="empty-message" v-else>
-                    <p>暂无购票记录~</p>
+                    <p>No purchase records available~</p>
                 </div>
             </main>
         </div>

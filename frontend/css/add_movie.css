@@ -16,7 +16,6 @@ body {
     flex-direction: column;
 }
 
-/* 顶部导航栏 */
 .header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -25,7 +24,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* 移除阴影 */
 }
 
 .welcome {
@@ -35,7 +33,6 @@ body {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 导航菜单 */
 .nav-menu {
     display: flex;
     gap: 40px;
@@ -73,7 +70,6 @@ body {
     width: 100%;
 }
 
-/* 内容标题栏 */
 .content-header {
     background: rgba(255, 255, 255, 0.9);
     padding: 20px 40px;
@@ -94,7 +90,6 @@ body {
     border-radius: 2px;
 }
 
-/* 表单区域 */
 .main-content {
     flex: 1;
     display: flex;

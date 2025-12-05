@@ -3,7 +3,6 @@ from database import get_db_connection
 
 halls_bp = Blueprint('halls', __name__)
 
-
 @halls_bp.route('/api/halls', methods=['GET'])
 def get_halls():
     try:
@@ -28,11 +27,8 @@ def get_halls():
         return jsonify({"success": True, "data": halls_list})
 
     except Exception as e:
-        print(f"获取影厅列表错误: {e}")
-        return jsonify({"success": False, "message": f"获取影厅失败: {str(e)}"})
-
-
-
+        print(f"Get hall list error: {e}")
+        return jsonify({"success": False, "message": f"Get hall failed: {str(e)}"})
 
 @halls_bp.route('/api/halls', methods=['POST'])
 def add_hall():
@@ -42,13 +38,13 @@ def add_hall():
     total_columns = data.get('total_columns')
 
     if not all([name, total_rows, total_columns]):
-        return jsonify({"success": False, "message": "请填写所有必填字段"})
+        return jsonify({"success": False, "message": "Please fill all required fields"})
 
     try:
         total_rows = int(total_rows)
         total_columns = int(total_columns)
         if total_rows <= 0 or total_columns <= 0:
-            return jsonify({"success": False, "message": "行数和列数必须是正整数"})
+            return jsonify({"success": False, "message": "Rows and columns must be positive integers"})
 
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -63,19 +59,18 @@ def add_hall():
             cursor.close()
             conn.close()
 
-            return jsonify({"success": True, "message": "影厅添加成功！"})
+            return jsonify({"success": True, "message": "Hall added successfully!"})
         except Exception as db_e:
             conn.rollback()
             if 'Duplicate entry' in str(db_e) and 'name' in str(db_e):
-                return jsonify({"success": False, "message": f"影厅名 '{name}' 已存在"})
+                return jsonify({"success": False, "message": f"Hall name '{name}' already exists"})
             raise db_e
 
     except ValueError:
-        return jsonify({"success": False, "message": "行数和列数必须是有效数字"})
+        return jsonify({"success": False, "message": "Rows and columns must be valid numbers"})
     except Exception as e:
-        print(f"添加影厅错误: {e}")
-        return jsonify({"success": False, "message": f"添加影厅失败: {str(e)}"})
-
+        print(f"Add hall error: {e}")
+        return jsonify({"success": False, "message": f"Add hall failed: {str(e)}"})
 
 @halls_bp.route('/api/halls/<int:hall_id>', methods=['DELETE'])
 def delete_hall(hall_id):
@@ -90,7 +85,7 @@ def delete_hall(hall_id):
             cursor.close()
             conn.close()
             return jsonify(
-                {"success": False, "message": f"删除失败：该影厅下有 {schedule_count} 个排片场次，请先删除相关场次。"})
+                {"success": False, "message": f"Delete failed: This hall has {schedule_count} scheduled screenings, please delete related schedules first."})
 
         cursor.execute("DELETE FROM hall WHERE id = %s", (hall_id,))
         deleted_rows = cursor.rowcount
@@ -100,11 +95,11 @@ def delete_hall(hall_id):
         conn.close()
 
         if deleted_rows == 0:
-            return jsonify({"success": False, "message": "影厅不存在或已被删除"})
+            return jsonify({"success": False, "message": "Hall does not exist or has been deleted"})
 
-        return jsonify({"success": True, "message": "影厅删除成功！"})
+        return jsonify({"success": True, "message": "Hall deleted successfully!"})
 
     except Exception as e:
         conn.rollback()
-        print(f"删除影厅错误: {e}")
-        return jsonify({"success": False, "message": f"删除影厅失败: {str(e)}"})
+        print(f"Delete hall error: {e}")
+        return jsonify({"success": False, "message": f"Delete hall failed: {str(e)}"})

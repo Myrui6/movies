@@ -20,11 +20,11 @@ createApp({
                     this.username = result.data.username;
                     this.loadOrders();
                 } else {
-                    console.error('获取用户信息失败:', result.message);
+                    console.error('Failed to get user info:', result.message);
                     window.location.href = '/';
                 }
             } catch (error) {
-                console.error('网络错误:', error);
+                console.error('Network error:', error);
                 window.location.href = '/';
             }
         },
@@ -37,25 +37,25 @@ createApp({
                 if (result.success) {
                     this.orders = result.data;
                 } else {
-                    console.error('加载订单失败:', result.message);
+                    console.error('Failed to load orders:', result.message);
                 }
             } catch (error) {
-                console.error('网络错误:', error);
+                console.error('Network error:', error);
             }
         },
 
         formatDateTime(datetimeStr) {
             if (!datetimeStr) return '';
             const date = new Date(datetimeStr);
-            return date.toLocaleString('zh-CN');
+            return date.toLocaleString();
         },
 
         getStatusText(state) {
             switch(state) {
-                case 0: return '已完成';
-                case 1: return '申请退票中';
-                case 2: return '已退票';
-                default: return '未知状态';
+                case 0: return 'Completed';
+                case 1: return 'Refund Requested';
+                case 2: return 'Refunded';
+                default: return 'Unknown Status';
             }
         },
 
@@ -69,15 +69,13 @@ createApp({
         },
 
         applyRefund(orderId) {
-            if (confirm('确定要申请退票吗？')) {
-                // 跳转到退票页面，传递订单ID
+            if (confirm('Are you sure to apply for refund?')) {
                 window.location.href = `/ticket-refund?order_id=${orderId}`;
             }
         },
 
-        // 新增：根据状态判断是否显示退票按钮
         canApplyRefund(state) {
-            return state === 0; // 只有状态为0（已完成）才能申请退票
+            return state === 0;
         }
     }
 }).mount('#app');

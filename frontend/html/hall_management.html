@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>影厅管理 - 影院管理系统</title>
+    <title>Hall Management - Cinema Management System</title>
     <link rel="stylesheet" href="../css/hall_management.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
@@ -11,21 +11,22 @@
     <div id="app">
         <div class="container">
             <header class="header">
-                <div class="welcome">欢迎进入影院！</div>
+                <div class="welcome">Welcome to Cinema!</div>
                 <nav class="nav-menu">
-                    <a href="/home" class="nav-item">排片管理</a>
-                    <a href="/all-orders" class="nav-item">订单交易</a>
-                    <a href="/hall-management" class="nav-item nav-active">影厅管理</a> <a href="/" class="nav-item">退出登录</a>
+                    <a href="/home" class="nav-item">Schedule Management</a>
+                    <a href="/all-orders" class="nav-item">Order Transactions</a>
+                    <a href="/hall-management" class="nav-item nav-active">Hall Management</a>
+                    <a href="/" class="nav-item">Logout</a>
                 </nav>
             </header>
 
             <div class="content-header">
                 <div class="section-title">
-                    <h2>在线影厅</h2>
+                    <h2>Available Halls</h2>
                     <div class="title-underline"></div>
                 </div>
                 <div class="add-hall">
-                    <button @click="showAddRow" class="add-btn">添加影厅</button>
+                    <button @click="showAddRow" class="add-btn">Add Hall</button>
                 </div>
             </div>
 
@@ -34,20 +35,20 @@
                     <table class="hall-table">
                         <thead>
                             <tr>
-                                <th>影厅名</th>
-                                <th>座位行数</th>
-                                <th>座位列数</th>
-                                <th>管理</th>
+                                <th>Hall Name</th>
+                                <th>Seat Rows</th>
+                                <th>Seat Columns</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-if="isAdding">
-                                <td><input type="text" v-model="newHall.name" placeholder="输入影厅名" class="input-inline"></td>
+                                <td><input type="text" v-model="newHall.name" placeholder="Enter hall name" class="input-inline"></td>
                                 <td><input type="number" v-model="newHall.total_rows" min="1" class="input-inline"></td>
                                 <td><input type="number" v-model="newHall.total_columns" min="1" class="input-inline"></td>
                                 <td>
-                                    <button class="action-btn confirm-btn" @click="addHall">确定</button>
-                                    <button class="action-btn cancel-btn" @click="cancelAdd">取消</button>
+                                    <button class="action-btn confirm-btn" @click="addHall">Confirm</button>
+                                    <button class="action-btn cancel-btn" @click="cancelAdd">Cancel</button>
                                 </td>
                             </tr>
 
@@ -56,14 +57,14 @@
                                 <td v-text="hall.total_rows"></td>
                                 <td v-text="hall.total_columns"></td>
                                 <td>
-                                    <button class="action-btn delete-btn" @click="deleteHall(hall.id, hall.name)">删除</button>
+                                    <button class="action-btn delete-btn" @click="deleteHall(hall.id, hall.name)">Delete</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="empty-message" v-if="!halls.length && !isAdding">
-                    <p>目前暂无影厅信息！</p>
+                    <p>No hall information available!</p>
                 </div>
             </main>
         </div>

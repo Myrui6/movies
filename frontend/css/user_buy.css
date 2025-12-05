@@ -16,7 +16,6 @@ body {
     flex-direction: column;
 }
 
-/* 顶部导航栏 */
 .header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -34,7 +33,6 @@ body {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 导航菜单 */
 .nav-menu {
     display: flex;
     gap: 40px;
@@ -72,7 +70,6 @@ body {
     width: 100%;
 }
 
-/* 内容标题栏 */
 .content-header {
     background: rgba(255, 255, 255, 0.9);
     padding: 20px 40px;
@@ -93,7 +90,6 @@ body {
     border-radius: 2px;
 }
 
-/* 主要内容区域 */
 .main-content {
     flex: 1;
     padding: 30px 40px;
@@ -143,7 +139,6 @@ body {
     font-style: italic;
 }
 
-/* 操作按钮 */
 .action-btn {
     padding: 8px 16px;
     border: none;
@@ -178,9 +173,6 @@ body {
     font-size: 18px;
     line-height: 1.6;
 }
-/* 在原有CSS文件末尾添加搜索栏样式 */
-
-/* 搜索栏 */
 .search-bar {
     background: rgba(255, 255, 255, 0.9);
     padding: 20px 40px;
@@ -229,7 +221,6 @@ body {
     box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
 
-/* 搜索无结果时的特殊样式 */
 .search-not-found {
     color: #e74c3c !important;
     font-size: 20px !important;

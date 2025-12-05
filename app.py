@@ -12,7 +12,6 @@ app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'
 CORS(app)
 
-
 app.register_blueprint(auth_bp)
 app.register_blueprint(movies_bp)
 app.register_blueprint(schedules_bp)
@@ -26,7 +25,6 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 @app.route('/')
 def home():
     return send_from_directory('frontend/html', 'login.html')
-
 
 @app.route('/register')
 def register_page():
@@ -76,7 +74,6 @@ def choose_seat():
 def my_order():
     return send_from_directory('frontend/html', 'my_order.html')
 
-
 @app.route('/ticket-refund')
 def ticket_refund():
     return send_from_directory('frontend/html', 'ticket_refund.html')
@@ -85,7 +82,7 @@ def ticket_refund():
 def all_orders():
     return send_from_directory('frontend/html', 'all_orders.html')
 
-@app.route('/hall-management') # <<< 新增影厅管理路由
+@app.route('/hall-management')
 def hall_management():
     return send_from_directory('frontend/html', 'hall_management.html')
 

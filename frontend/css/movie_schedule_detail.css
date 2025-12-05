@@ -16,7 +16,6 @@ body {
     flex-direction: column;
 }
 
-/* 顶部导航栏 */
 .header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -34,7 +33,6 @@ body {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 导航菜单 */
 .nav-menu {
     display: flex;
     gap: 40px;
@@ -72,7 +70,6 @@ body {
     width: 100%;
 }
 
-/* 主要内容区域 */
 .main-content {
     flex: 1;
     padding: 40px;
@@ -86,18 +83,16 @@ body {
     max-width: 900px;
 }
 
-/* 影片详情卡片 */
 .movie-detail-card {
-    background: #fafafa; /* 改为纯浅灰色 */
+    background: #fafafa;
     border-radius: 15px;
     padding: 40px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     display: flex;
     gap: 40px;
-    margin-bottom: 30px; /* 添加底部间距 */
+    margin-bottom: 30px;
 }
 
-/* 左侧海报区域 */
 .poster-section {
     flex-shrink: 0;
 }
@@ -123,7 +118,6 @@ body {
     font-weight: 500;
 }
 
-/* 右侧信息区域 */
 .info-section {
     flex: 1;
     display: flex;
@@ -171,16 +165,15 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* 场次管理标题栏 */
 .schedule-header {
     background: rgba(255, 255, 255, 0.95);
     padding: 20px 30px;
-    border-radius: 10px 10px 0 0; /* 上边圆角，下边直角 */
+    border-radius: 10px 10px 0 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    margin-bottom: 0; /* 移除底部间距 */
+    margin-bottom: 0;
 }
 
 .schedule-title h2 {
@@ -215,16 +208,15 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
-/* 在原有CSS基础上添加以下样式 */
 
-/* 场次表格容器 */
+
 .schedule-table-container {
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 0 0 15px 15px; /* 下边圆角，上边直角 */
+    border-radius: 0 0 15px 15px;
     padding: 30px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(10px);
-    margin-top: 0; /* 移除顶部间距 */
+    margin-top: 0;
 }
 
 .schedule-table {
@@ -250,8 +242,6 @@ body {
 .schedule-table tr:hover {
     background: #f8f9fa;
 }
-
-/* 操作按钮 */
 .action-btn {
     padding: 6px 12px;
     border: none;
@@ -271,7 +261,6 @@ body {
     transform: translateY(-1px);
 }
 
-/* 空场次提示 */
 .empty-schedule {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
@@ -287,12 +276,10 @@ body {
     font-size: 18px;
     line-height: 1.6;
 }
-/* 添加场次区块容器 */
 .schedule-section {
     margin-top: 30px;
 }
 
-/* 确保标题栏和表格紧密连接 */
 .schedule-header {
     background: rgba(255, 255, 255, 0.95);
     padding: 20px 30px;
@@ -311,7 +298,6 @@ body {
     backdrop-filter: blur(10px);
 }
 
-/* 空场次提示样式调整 */
 .empty-schedule {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 0 0 15px 15px;

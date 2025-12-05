@@ -1,68 +1,65 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>添加影片 - 影院管理系统</title>
+    <title>Add Movie - Cinema Management System</title>
     <link rel="stylesheet" href="../css/add_movie.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
     <div id="app">
         <div class="container">
-            <!-- 顶部导航栏 -->
             <header class="header">
-                <div class="welcome">欢迎进入影院！</div>
+                <div class="welcome">Welcome to Cinema!</div>
                 <nav class="nav-menu">
-                    <a href="/home" class="nav-item">排片管理</a>
-                    <a href="/all-orders" class="nav-item">订单交易</a>
-                    <a href="/hall-management" class="nav-item">影厅管理</a>
-                    <a href="/" class="nav-item">退出登录</a>
+                    <a href="/home" class="nav-item">Schedule Management</a>
+                    <a href="/all-orders" class="nav-item">Order Transactions</a>
+                    <a href="/hall-management" class="nav-item">Hall Management</a>
+                    <a href="/" class="nav-item">Logout</a>
                 </nav>
             </header>
 
-            <!-- 内容标题栏 -->
             <div class="content-header">
                 <div class="section-title">
-                    <h2>添加影片</h2>
+                    <h2>Add Movie</h2>
                     <div class="title-underline"></div>
                 </div>
             </div>
 
-            <!-- 表单区域 -->
             <main class="main-content">
                 <form class="movie-form" @submit.prevent="submitForm">
                     <div class="form-group">
-                        <label for="movieName">影片名称</label>
+                        <label for="movieName">Movie Name</label>
                         <input type="text" id="movieName" class="form-input" v-model="formData.name" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="poster">海报图片</label>
+                        <label for="poster">Poster Image</label>
                         <input type="file" id="poster" class="form-file" accept="image/*" @change="handleFileUpload">
                     </div>
 
                     <div class="form-group">
-                        <label for="movieType">影片类型</label>
+                        <label for="movieType">Movie Type</label>
                         <input type="text" id="movieType" class="form-input" v-model="formData.type" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="region">地区</label>
+                        <label for="region">Region</label>
                         <input type="text" id="region" class="form-input" v-model="formData.region" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="duration">放映时长（分钟）</label>
+                        <label for="duration">Duration (minutes)</label>
                         <input type="number" id="duration" class="form-input" v-model="formData.time" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="description">内容简介</label>
+                        <label for="description">Plot Summary</label>
                         <textarea id="description" class="form-textarea" rows="4" v-model="formData.brief" required></textarea>
                     </div>
 
-                    <button type="submit" class="submit-btn">确认添加</button>
+                    <button type="submit" class="submit-btn">Confirm Add</button>
                 </form>
             </main>
         </div>

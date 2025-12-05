@@ -1,8 +1,7 @@
-from flask import Blueprint, request, jsonify, session  # 添加session导入
+from flask import Blueprint, request, jsonify, session
 from database import get_db_connection
 
 auth_bp = Blueprint('auth', __name__)
-
 
 @auth_bp.route('/api/login', methods=['POST'])
 def login():
@@ -12,7 +11,7 @@ def login():
     user_type = data.get('userType')
 
     if not username or not password:
-        return jsonify({"success": False, "message": "用户名和密码不能为空"})
+        return jsonify({"success": False, "message": "Username and password cannot be empty"})
 
     try:
         conn = get_db_connection()
@@ -31,14 +30,13 @@ def login():
         conn.close()
 
         if user:
-            # 设置session - 新增代码
             session['user_id'] = user[0]
             session['username'] = user[1]
             session['user_type'] = user_type
 
             return jsonify({
                 "success": True,
-                "message": "登录成功",
+                "message": "Login successful",
                 "user": {
                     "id": user[0],
                     "username": user[1],
@@ -47,13 +45,11 @@ def login():
                 "redirect": "/home" if user_type == "员工" else "/user-buy"
             })
         else:
-            return jsonify({"success": False, "message": f"{user_table}账号或密码错误"})
+            return jsonify({"success": False, "message": f"{user_table} account or password error"})
 
     except Exception as e:
-        print(f"登录错误: {e}")
-        return jsonify({"success": False, "message": f"登录失败: {str(e)}"})
-
-
+        print(f"Login error: {e}")
+        return jsonify({"success": False, "message": f"Login failed: {str(e)}"})
 
 @auth_bp.route('/api/register', methods=['POST'])
 def register():
@@ -63,10 +59,10 @@ def register():
     user_type = data.get('userType')
 
     if not username or not password:
-        return jsonify({"success": False, "message": "用户名和密码不能为空"})
+        return jsonify({"success": False, "message": "Username and password cannot be empty"})
 
     if len(password) < 6:
-        return jsonify({"success": False, "message": "密码长度不能少于6位"})
+        return jsonify({"success": False, "message": "Password must be at least 6 characters"})
 
     try:
         conn = get_db_connection()
@@ -83,7 +79,7 @@ def register():
         if existing_user:
             cursor.close()
             conn.close()
-            return jsonify({"success": False, "message": f"用户名 '{username}' 已存在"})
+            return jsonify({"success": False, "message": f"Username '{username}' already exists"})
 
         if user_type == '员工':
             cursor.execute("INSERT INTO administrator (name, password) VALUES (%s, %s)",
@@ -100,7 +96,7 @@ def register():
 
         return jsonify({
             "success": True,
-            "message": f"{user_type}注册成功",
+            "message": f"{user_type} registration successful",
             "user": {
                 "id": user_id,
                 "username": username,
@@ -109,8 +105,8 @@ def register():
         })
 
     except Exception as e:
-        print(f"注册错误: {e}")
-        return jsonify({"success": False, "message": f"注册失败: {str(e)}"})
+        print(f"Registration error: {e}")
+        return jsonify({"success": False, "message": f"Registration failed: {str(e)}"})
 
 @auth_bp.route('/api/current-user', methods=['GET'])
 def get_current_user():
@@ -126,14 +122,13 @@ def get_current_user():
     else:
         return jsonify({
             "success": False,
-            "message": "用户未登录"
+            "message": "User not logged in"
         }), 401
-
 
 @auth_bp.route('/api/logout', methods=['POST'])
 def logout():
     session.clear()
     return jsonify({
         "success": True,
-        "message": "退出登录成功"
+        "message": "Logout successful"
     })

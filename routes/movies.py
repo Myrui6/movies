@@ -1,11 +1,8 @@
 from flask import Blueprint, request, jsonify
 from database import get_db_connection
-import os
 import base64
-from datetime import datetime
 
 movies_bp = Blueprint('movies', __name__)
-
 
 @movies_bp.route('/api/movies', methods=['POST'])
 def add_movie():
@@ -18,12 +15,10 @@ def add_movie():
         picture = request.files.get('picture')
 
         if not all([name, movie_type, region, time, brief]):
-            return jsonify({"success": False, "message": "请填写所有必填字段"})
+            return jsonify({"success": False, "message": "Please fill all required fields"})
 
-        # 处理图片上传 - 存储为二进制数据
         picture_data = None
         if picture:
-            # 读取图片文件为二进制数据
             picture_data = picture.read()
 
         conn = get_db_connection()
@@ -38,12 +33,11 @@ def add_movie():
         cursor.close()
         conn.close()
 
-        return jsonify({"success": True, "message": "影片添加成功"})
+        return jsonify({"success": True, "message": "Movie added successfully"})
 
     except Exception as e:
-        print(f"添加影片错误: {e}")
-        return jsonify({"success": False, "message": f"添加失败: {str(e)}"})
-
+        print(f"Add movie error: {e}")
+        return jsonify({"success": False, "message": f"Add failed: {str(e)}"})
 
 @movies_bp.route('/api/movies', methods=['GET'])
 def get_movies():
@@ -53,7 +47,6 @@ def get_movies():
         cursor = conn.cursor()
 
         if search_keyword:
-            # 模糊搜索
             cursor.execute("""
                            SELECT id, name, picture, type, region, time, brief
                            FROM movie
@@ -64,14 +57,12 @@ def get_movies():
                            """,
                            (f'%{search_keyword}%', f'%{search_keyword}%', f'%{search_keyword}%', f'%{search_keyword}%'))
         else:
-            # 获取所有电影
             cursor.execute("SELECT id, name, picture, type, region, time, brief FROM movie")
 
         movies = cursor.fetchall()
         cursor.close()
         conn.close()
 
-        # 处理混合格式的图片数据
         movie_list = []
         for movie in movies:
             movie_dict = {
@@ -84,18 +75,15 @@ def get_movies():
                 'picture': None
             }
 
-            # 处理图片数据
             if movie[2]:
                 if isinstance(movie[2], bytes):
-                    # 二进制数据 - 转换为base64
                     try:
                         picture_base64 = base64.b64encode(movie[2]).decode('utf-8')
                         movie_dict['picture'] = f"data:image/jpeg;base64,{picture_base64}"
                     except Exception as e:
-                        print(f"转换图片base64失败: {e}")
+                        print(f"Convert picture to base64 failed: {e}")
                         movie_dict['picture'] = None
                 else:
-                    # 字符串数据 - 可能是文件路径
                     picture_str = str(movie[2])
                     if picture_str.startswith('uploads/'):
                         movie_dict['picture'] = f'/{picture_str}'
@@ -107,9 +95,8 @@ def get_movies():
         return jsonify({"success": True, "data": movie_list})
 
     except Exception as e:
-        print(f"获取电影列表错误: {e}")
-        return jsonify({"success": False, "message": f"获取电影列表失败: {str(e)}"})
-
+        print(f"Get movie list error: {e}")
+        return jsonify({"success": False, "message": f"Get movie list failed: {str(e)}"})
 
 @movies_bp.route('/api/movies/<int:movie_id>', methods=['DELETE'])
 def delete_movie(movie_id):
@@ -117,11 +104,9 @@ def delete_movie(movie_id):
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 先删除该影片对应的所有场次
         cursor.execute("DELETE FROM schedule WHERE movie_id = %s", (movie_id,))
         schedule_deleted = cursor.rowcount
 
-        # 再删除影片本身
         cursor.execute("DELETE FROM movie WHERE id = %s", (movie_id,))
         movie_deleted = cursor.rowcount
 
@@ -132,14 +117,14 @@ def delete_movie(movie_id):
         if movie_deleted > 0:
             return jsonify({
                 "success": True,
-                "message": f"影片下架成功！同时删除了 {schedule_deleted} 个相关场次"
+                "message": f"Movie removed successfully! Also deleted {schedule_deleted} related schedules"
             })
         else:
-            return jsonify({"success": False, "message": "影片不存在"})
+            return jsonify({"success": False, "message": "Movie does not exist"})
 
     except Exception as e:
-        print(f"删除影片错误: {e}")
-        return jsonify({"success": False, "message": f"下架失败: {str(e)}"})
+        print(f"Delete movie error: {e}")
+        return jsonify({"success": False, "message": f"Remove failed: {str(e)}"})
 
 @movies_bp.route('/api/movies/<int:movie_id>', methods=['GET'])
 def get_movie_detail(movie_id):
@@ -154,9 +139,8 @@ def get_movie_detail(movie_id):
         conn.close()
 
         if not movie:
-            return jsonify({"success": False, "message": "影片不存在"})
+            return jsonify({"success": False, "message": "Movie does not exist"})
 
-        # 处理图片数据
         picture_data = None
         if movie[2]:
             if isinstance(movie[2], bytes):
@@ -185,9 +169,8 @@ def get_movie_detail(movie_id):
         return jsonify({"success": True, "data": movie_dict})
 
     except Exception as e:
-        print(f"获取影片详情错误: {e}")
-        return jsonify({"success": False, "message": f"获取影片详情失败: {str(e)}"})
-
+        print(f"Get movie detail error: {e}")
+        return jsonify({"success": False, "message": f"Get movie detail failed: {str(e)}"})
 
 @movies_bp.route('/api/movies/with-schedules', methods=['GET'])
 def get_movies_with_schedules():
@@ -195,7 +178,6 @@ def get_movies_with_schedules():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 查询有场次的影片
         cursor.execute("""
                        SELECT DISTINCT m.id, m.name, m.picture, m.type, m.region, m.time, m.brief
                        FROM movie m
@@ -207,7 +189,6 @@ def get_movies_with_schedules():
         cursor.close()
         conn.close()
 
-        # 处理图片数据
         movie_list = []
         for movie in movies:
             movie_dict = {
@@ -220,7 +201,6 @@ def get_movies_with_schedules():
                 'picture': None
             }
 
-            # 处理图片数据
             if movie[2]:
                 if isinstance(movie[2], bytes):
                     try:
@@ -240,5 +220,5 @@ def get_movies_with_schedules():
         return jsonify({"success": True, "data": movie_list})
 
     except Exception as e:
-        print(f"获取有场次影片错误: {e}")
-        return jsonify({"success": False, "message": f"获取影片列表失败: {str(e)}"})
+        print(f"Get movies with schedules error: {e}")
+        return jsonify({"success": False, "message": f"Get movie list failed: {str(e)}"})

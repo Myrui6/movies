@@ -6,21 +6,20 @@ createApp({
             formData: {
                 movie_name: '',
                 start_time: '',
-                hall_id: '', // 核心修改：改为发送 hall_id
+                hall_id: '',
                 price: '',
                 movie_id: ''
             },
-            halls: [], // 新增：用于存储影厅列表
+            halls: [],
             message: ''
         }
     },
     mounted() {
         this.loadMovieInfo();
-        this.loadHalls(); // 新增：加载影厅列表
+        this.loadHalls();
     },
     methods: {
         loadMovieInfo() {
-            // ... (保持不变) ...
             const urlParams = new URLSearchParams(window.location.search);
             const movieId = urlParams.get('movie_id');
             const movieName = urlParams.get('movie_name');
@@ -29,14 +28,13 @@ createApp({
                 this.formData.movie_id = movieId;
                 this.formData.movie_name = decodeURIComponent(movieName);
             } else {
-                alert('无效的电影信息');
+                alert('Invalid movie information');
                 window.history.back();
             }
         },
 
-        // 新增方法：加载影厅列表
         async loadHalls() {
-            this.message = '正在加载影厅...';
+            this.message = 'Loading halls...';
             try {
                 const response = await fetch('/api/halls');
                 const result = await response.json();
@@ -45,12 +43,12 @@ createApp({
                     this.halls = result.data;
                     this.message = '';
                 } else {
-                    console.error('加载影厅失败:', result.message);
-                    this.message = '加载影厅列表失败：' + result.message;
+                    console.error('Failed to load halls:', result.message);
+                    this.message = 'Failed to load hall list: ' + result.message;
                 }
             } catch (error) {
-                console.error('网络错误:', error);
-                this.message = '网络错误，无法加载影厅列表。';
+                console.error('Network error:', error);
+                this.message = 'Network error, cannot load hall list.';
             }
         },
 
@@ -58,9 +56,8 @@ createApp({
             this.message = '';
 
             try {
-                // 验证表单 - 核心修改：只检查 hall_id 和 price
                 if (!this.formData.start_time || !this.formData.hall_id || !this.formData.price) {
-                    this.message = '请填写所有必填字段';
+                    this.message = 'Please fill all required fields';
                     return;
                 }
 
@@ -69,7 +66,6 @@ createApp({
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    // 核心修改：只发送 movie_id, hall_id, start_time, price
                     body: JSON.stringify({
                         movie_id: this.formData.movie_id,
                         hall_id: this.formData.hall_id,
@@ -81,15 +77,15 @@ createApp({
                 const result = await response.json();
 
                 if (result.success) {
-                    alert('场次添加成功！' + result.message);
+                    alert('Schedule added successfully!' + result.message);
                     window.location.href = `/movie-schedule-detail?id=${this.formData.movie_id}`;
                 } else {
-                    this.message = '添加失败：' + result.message;
-                    alert('添加失败：' + result.message);
+                    this.message = 'Failed to add: ' + result.message;
+                    alert('Failed to add: ' + result.message);
                 }
             } catch (error) {
-                this.message = '网络错误，请重试';
-                alert('网络错误，请重试');
+                this.message = 'Network error, please try again';
+                alert('Network error, please try again');
             }
         }
     }

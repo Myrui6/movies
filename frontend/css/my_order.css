@@ -16,7 +16,6 @@ body {
     flex-direction: column;
 }
 
-/* 顶部导航栏 */
 .header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -34,7 +33,6 @@ body {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 导航菜单 */
 .nav-menu {
     display: flex;
     gap: 40px;
@@ -72,7 +70,6 @@ body {
     width: 100%;
 }
 
-/* 内容标题栏 */
 .content-header {
     background: rgba(255, 255, 255, 0.9);
     padding: 20px 40px;
@@ -93,7 +90,6 @@ body {
     border-radius: 2px;
 }
 
-/* 主要内容区域 */
 .main-content {
     flex: 1;
     padding: 30px 40px;
@@ -130,8 +126,6 @@ body {
 .order-table tr:hover {
     background: #f8f9fa;
 }
-
-/* 状态样式 */
 .status-completed {
     color: #27ae60;
     font-weight: 600;
@@ -147,7 +141,6 @@ body {
     font-weight: 600;
 }
 
-/* 操作按钮 */
 .action-btn {
     padding: 6px 12px;
     border: none;
@@ -174,7 +167,6 @@ body {
     transform: none;
 }
 
-/* 空订单提示 */
 .empty-message {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
@@ -190,9 +182,6 @@ body {
     line-height: 1.6;
 }
 
-/* 在原有CSS文件末尾添加以下样式 */
-
-/* 退票处理中状态 */
 .refund-processing {
     color: #f39c12;
     font-weight: 600;
@@ -202,7 +191,6 @@ body {
     font-size: 14px;
 }
 
-/* 已退票状态 */
 .refunded {
     color: #7f8c8d;
     font-weight: 600;

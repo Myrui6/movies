@@ -16,7 +16,6 @@ body {
     flex-direction: column;
 }
 
-/* 顶部导航栏 */
 .header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -34,7 +33,6 @@ body {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 导航菜单 */
 .nav-menu {
     display: flex;
     gap: 40px;
@@ -72,7 +70,6 @@ body {
     width: 100%;
 }
 
-/* 主要内容区域 */
 .main-content {
     flex: 1;
     padding: 40px;
@@ -86,7 +83,6 @@ body {
     max-width: 900px;
 }
 
-/* 影片详情卡片 */
 .movie-detail-card {
     background: #fafafa;
     border-radius: 15px;
@@ -97,7 +93,6 @@ body {
     margin-bottom: 30px;
 }
 
-/* 左侧海报区域 */
 .poster-section {
     flex-shrink: 0;
 }
@@ -123,7 +118,6 @@ body {
     font-weight: 500;
 }
 
-/* 右侧信息区域 */
 .info-section {
     flex: 1;
     display: flex;
@@ -171,7 +165,6 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* 场次选择标题栏 */
 .schedule-header {
     background: rgba(255, 255, 255, 0.95);
     padding: 20px 30px;
@@ -194,7 +187,6 @@ body {
     border-radius: 2px;
 }
 
-/* 场次表格容器 */
 .schedule-table-container {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 0 0 15px 15px;
@@ -228,7 +220,6 @@ body {
     background: #f8f9fa;
 }
 
-/* 操作按钮 */
 .action-btn {
     padding: 8px 16px;
     border: none;
@@ -249,7 +240,6 @@ body {
     box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
 }
 
-/* 空场次提示 */
 .empty-schedule {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 0 0 15px 15px;

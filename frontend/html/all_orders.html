@@ -1,87 +1,83 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>订单交易 - 影院管理系统</title>
+    <title>Order Transactions - Cinema Management System</title>
     <link rel="stylesheet" href="../css/all_orders.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
     <div id="app">
         <div class="container">
-            <!-- 顶部导航栏 -->
             <header class="header">
-                <div class="welcome">欢迎进入影院！</div>
+                <div class="welcome">Welcome to Cinema!</div>
                 <nav class="nav-menu">
-                    <a href="/home" class="nav-item">排片管理</a>
-                    <a href="/all-orders" class="nav-item">订单交易</a>
-                    <a href="/hall-management" class="nav-item">影厅管理</a>
-                    <a href="/" class="nav-item">退出登录</a>
+                    <a href="/home" class="nav-item">Schedule Management</a>
+                    <a href="/all-orders" class="nav-item">Order Transactions</a>
+                    <a href="/hall-management" class="nav-item">Hall Management</a>
+                    <a href="/" class="nav-item">Logout</a>
                 </nav>
             </header>
 
-            <!-- 内容标题栏 -->
             <div class="content-header">
                 <div class="section-title">
-                    <h2>订单详情</h2>
+                    <h2>Order Details</h2>
                     <div class="title-underline"></div>
                 </div>
             </div>
 
-            <!-- 筛选栏 -->
             <div class="filter-bar">
                 <div class="filter-container">
                     <div class="filter-group">
-                        <label class="filter-label">影片名：</label>
+                        <label class="filter-label">Movie Name:</label>
                         <select class="filter-select" v-model="filters.movieName">
-                            <option value="">全部</option>
+                            <option value="">All</option>
                             <option v-for="movie in movieOptions" :key="movie" :value="movie">{{ movie }}</option>
                         </select>
                     </div>
 
                     <div class="filter-group">
-                        <label class="filter-label">放映时间：</label>
+                        <label class="filter-label">Screening Date:</label>
                         <input type="date" class="date-input" v-model="filters.startDate">
                         <div class="date-hint" v-if="filters.startDate && !isDateAvailable(filters.startDate)">
-                            <span class="hint-text">该日期无场次</span>
+                            <span class="hint-text">No schedules on this date</span>
                         </div>
                     </div>
 
                     <div class="filter-group">
-                        <label class="filter-label">放映影厅：</label>
+                        <label class="filter-label">Hall:</label>
                         <select class="filter-select" v-model="filters.hall">
-                            <option value="">全部</option>
+                            <option value="">All</option>
                             <option v-for="hall in hallOptions" :key="hall" :value="hall">{{ hall }}</option>
                         </select>
                     </div>
 
                     <div class="filter-group">
-                        <label class="filter-label">订单状态：</label>
+                        <label class="filter-label">Order Status:</label>
                         <select class="filter-select" v-model="filters.state">
-                            <option value="">全部</option>
+                            <option value="">All</option>
                             <option v-for="status in statusOptions" :key="status.value" :value="status.value">{{ status.label }}</option>
                         </select>
                     </div>
 
-                    <button class="search-btn" @click="searchOrders">搜索</button>
+                    <button class="search-btn" @click="searchOrders">Search</button>
                 </div>
             </div>
 
-            <!-- 订单表格 -->
             <main class="main-content">
                 <div class="table-container" v-if="orders.length > 0">
                     <table class="order-table">
                         <thead>
                             <tr>
-                                <th>影片名</th>
-                                <th>用户名</th>
-                                <th>开始时间</th>
-                                <th>放映厅</th>
-                                <th>座位号</th>
-                                <th>总票价</th>
-                                <th>订单状态</th>
-                                <th>管理</th>
+                                <th>Movie Name</th>
+                                <th>Username</th>
+                                <th>Start Time</th>
+                                <th>Hall</th>
+                                <th>Seats</th>
+                                <th>Total Price</th>
+                                <th>Order Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,28 +87,27 @@
                                 <td v-text="formatDateTime(order.start_time)"></td>
                                 <td v-text="order.hall"></td>
                                 <td v-text="order.seat"></td>
-                                <td v-text="order.total_price + '元'"></td>
+                                <td v-text="order.total_price + '￥'"></td>
                                 <td>
                                     <span :class="getStatusClass(order.state)" v-text="getStatusText(order.state)"></span>
                                 </td>
                                 <td>
-                                    <button v-if="order.state === 1" class="action-btn process-btn" @click="processRefund(order.id, order.reason)">退票处理</button>
-                                    <span v-else-if="order.state === 0" class="status-text completed">已完成</span>
-                                    <span v-else-if="order.state === 2" class="status-text refunded">退票完成</span>
+                                    <button v-if="order.state === 1" class="action-btn process-btn" @click="processRefund(order.id, order.reason)">Refund Process</button>
+                                    <span v-else-if="order.state === 0" class="status-text completed">Completed</span>
+                                    <span v-else-if="order.state === 2" class="status-text refunded">Refunded</span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <!-- 分页 -->
                     <div class="pagination">
-                        <button class="page-btn" :disabled="currentPage === 1" @click="changePage(currentPage - 1)">上一页</button>
-                        <span class="page-info">第 {{ currentPage }} 页 / 共 {{ totalPages }} 页</span>
-                        <button class="page-btn" :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">下一页</button>
+                        <button class="page-btn" :disabled="currentPage === 1" @click="changePage(currentPage - 1)">Previous</button>
+                        <span class="page-info">Page {{ currentPage }} / {{ totalPages }}</span>
+                        <button class="page-btn" :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">Next</button>
                     </div>
                 </div>
                 <div class="empty-message" v-else>
-                    <p>暂无订单数据</p>
+                    <p>No order data available</p>
                 </div>
             </main>
         </div>

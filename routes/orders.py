@@ -1,22 +1,19 @@
-from flask import Blueprint, request, jsonify, session  # 添加session导入
+from flask import Blueprint, request, jsonify, session
 from database import get_db_connection
 
 orders_bp = Blueprint('orders', __name__)
 
-
 @orders_bp.route('/api/orders', methods=['GET'])
 def get_orders():
     try:
-        # 从session获取用户ID
         if 'user_id' not in session:
-            return jsonify({"success": False, "message": "用户未登录"}), 401
+            return jsonify({"success": False, "message": "User not logged in"}), 401
 
         user_id = session['user_id']
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 修改：修复字段别名错误 - sc.start_time 而不是 s.start_time
         cursor.execute("""
                        SELECT o.id,
                               u.name AS username,
@@ -48,7 +45,7 @@ def get_orders():
                 'movie_name': order[2],
                 'start_time': order[3].strftime('%Y-%m-%d %H:%M:%S') if order[3] else '',
                 'hall': order[4],
-                'seat': order[5],  # seat_details
+                'seat': order[5],
                 'total_price': order[6],
                 'state': order[7],
                 'reason': order[8]
@@ -57,18 +54,17 @@ def get_orders():
         return jsonify({"success": True, "data": order_list})
 
     except Exception as e:
-        print(f"获取订单错误: {e}")
-        return jsonify({"success": False, "message": f"获取订单失败: {str(e)}"})
+        print(f"Get orders error: {e}")
+        return jsonify({"success": False, "message": f"Get orders failed: {str(e)}"})
 
 @orders_bp.route('/api/orders', methods=['POST'])
 def create_order():
     try:
-        # 从session获取用户ID，而不是用户名
         if 'user_id' not in session:
-            return jsonify({"success": False, "message": "用户未登录"}), 401
+            return jsonify({"success": False, "message": "User not logged in"}), 401
 
         data = request.get_json()
-        user_id = session['user_id']  # 从session获取用户ID
+        user_id = session['user_id']
         movie_name = data.get('movie_name')
         start_time = data.get('start_time')
         hall = data.get('hall')
@@ -78,18 +74,16 @@ def create_order():
         selected_seats = data.get('selected_seats')
 
         if not all([movie_name, start_time, hall, seat, total_price, schedule_id, selected_seats]):
-            return jsonify({"success": False, "message": "缺少必要信息"})
+            return jsonify({"success": False, "message": "Missing required information"})
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 修改：使用 user_id 而不是 username
         cursor.execute("""
                        INSERT INTO `order` (user_id, schedule_id, seat_details, total_price, state)
                        VALUES (%s, %s, %s, %s, %s)
                        """, (user_id, schedule_id, seat, total_price, 0))
 
-        # 更新座位状态为1（已售）
         for seat_info in selected_seats:
             cursor.execute("""
                            UPDATE seat 
@@ -103,32 +97,28 @@ def create_order():
         cursor.close()
         conn.close()
 
-        return jsonify({"success": True, "message": "订单创建成功"})
+        return jsonify({"success": True, "message": "Order created successfully"})
 
     except Exception as e:
-        print(f"创建订单错误: {e}")
-        return jsonify({"success": False, "message": f"创建订单失败: {str(e)}"})
+        print(f"Create order error: {e}")
+        return jsonify({"success": False, "message": f"Create order failed: {str(e)}"})
 
-
-# 新增：更新订单状态接口
 @orders_bp.route('/api/orders/<int:order_id>/refund', methods=['POST'])
 def apply_refund(order_id):
     try:
-        # 从session获取用户ID
         if 'user_id' not in session:
-            return jsonify({"success": False, "message": "用户未登录"}), 401
+            return jsonify({"success": False, "message": "User not logged in"}), 401
 
         user_id = session['user_id']
         data = request.get_json()
         reason = data.get('reason', '')
 
         if not reason:
-            return jsonify({"success": False, "message": "退票原因不能为空"})
+            return jsonify({"success": False, "message": "Refund reason cannot be empty"})
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 验证订单属于当前用户且状态为0（已完成）
         cursor.execute("""
                        SELECT id
                        FROM `order`
@@ -142,9 +132,8 @@ def apply_refund(order_id):
         if not order:
             cursor.close()
             conn.close()
-            return jsonify({"success": False, "message": "订单不存在或无法申请退票"})
+            return jsonify({"success": False, "message": "Order does not exist or cannot apply for refund"})
 
-        # 更新订单状态和原因
         cursor.execute("""
                        UPDATE `order`
                        SET state  = 1,
@@ -157,14 +146,11 @@ def apply_refund(order_id):
         cursor.close()
         conn.close()
 
-        return jsonify({"success": True, "message": "退票申请提交成功"})
+        return jsonify({"success": True, "message": "Refund application submitted successfully"})
 
     except Exception as e:
-        print(f"申请退票错误: {e}")
-        return jsonify({"success": False, "message": f"申请退票失败: {str(e)}"})
-
-
-# 在orders.py文件末尾添加
+        print(f"Apply refund error: {e}")
+        return jsonify({"success": False, "message": f"Apply refund failed: {str(e)}"})
 
 @orders_bp.route('/api/orders/filter-options', methods=['GET'])
 def get_order_filter_options():
@@ -172,7 +158,6 @@ def get_order_filter_options():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 修改：修复SQL连接错误，正确连接所有需要的表
         cursor.execute("""
             SELECT DISTINCT m.name 
             FROM movie m 
@@ -213,12 +198,8 @@ def get_order_filter_options():
         })
 
     except Exception as e:
-        print(f"获取筛选选项错误: {e}")
-        return jsonify({"success": False, "message": f"获取筛选选项失败: {str(e)}"})
-
-
-
-# 在orders.py文件末尾添加
+        print(f"Get filter options error: {e}")
+        return jsonify({"success": False, "message": f"Get filter options failed: {str(e)}"})
 
 @orders_bp.route('/api/orders/all', methods=['GET'])
 def get_all_orders():
@@ -226,7 +207,6 @@ def get_all_orders():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 修改：修复字段别名错误
         cursor.execute("""
             SELECT o.id,
                    u.name AS username,
@@ -266,8 +246,8 @@ def get_all_orders():
         return jsonify({"success": True, "data": order_list})
 
     except Exception as e:
-        print(f"获取所有订单错误: {e}")
-        return jsonify({"success": False, "message": f"获取订单失败: {str(e)}"})
+        print(f"Get all orders error: {e}")
+        return jsonify({"success": False, "message": f"Get orders failed: {str(e)}"})
 
 @orders_bp.route('/api/orders/search', methods=['GET'])
 def search_orders():
@@ -280,7 +260,6 @@ def search_orders():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 修改：修复字段别名错误
         query = """
             SELECT o.id,
                    u.name AS username,
@@ -340,23 +319,21 @@ def search_orders():
         return jsonify({"success": True, "data": order_list})
 
     except Exception as e:
-        print(f"搜索订单错误: {e}")
-        return jsonify({"success": False, "message": f"搜索订单失败: {str(e)}"})
-
+        print(f"Search orders error: {e}")
+        return jsonify({"success": False, "message": f"Search orders failed: {str(e)}"})
 
 @orders_bp.route('/api/orders/<int:order_id>/process-refund', methods=['POST'])
 def process_refund(order_id):
     try:
         data = request.get_json()
-        action = data.get('action')  # 'approve' 或 'reject'
+        action = data.get('action')
 
         if not action:
-            return jsonify({"success": False, "message": "缺少操作类型"})
+            return jsonify({"success": False, "message": "Missing action type"})
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 检查订单是否存在且状态为1（申请退票中）
         cursor.execute("""
                        SELECT id, state, schedule_id, seat_details
                        FROM `order`
@@ -369,24 +346,20 @@ def process_refund(order_id):
         if not order:
             cursor.close()
             conn.close()
-            return jsonify({"success": False, "message": "订单不存在或状态不正确"})
+            return jsonify({"success": False, "message": "Order does not exist or status incorrect"})
 
         schedule_id = order[2]
-        seat_details = order[3]  # 座位信息，如 "1排2座, 1排3座"
+        seat_details = order[3]
 
         if action == 'approve':
-            # 批准退票：更新订单状态为2（已退票）
             cursor.execute("""
                            UPDATE `order`
                            SET state = 2
                            WHERE id = %s
                            """, (order_id,))
 
-            # 只释放该订单对应的座位，而不是所有座位
-            # 从seat_details中解析座位信息
             seats = []
             if seat_details:
-                # 解析座位字符串，如 "1排2座, 1排3座" 或 "1排2座"
                 seat_items = seat_details.split(',')
                 for seat_item in seat_items:
                     seat_item = seat_item.strip()
@@ -397,9 +370,8 @@ def process_refund(order_id):
                             col = int(col_str.strip())
                             seats.append((row, col))
                         except ValueError:
-                            print(f"座位格式解析错误: {seat_item}")
+                            print(f"Seat format parse error: {seat_item}")
 
-            # 释放该订单对应的具体座位
             for row, col in seats:
                 cursor.execute("""
                                UPDATE seat
@@ -410,10 +382,9 @@ def process_refund(order_id):
                                  AND state = 1
                                """, (schedule_id, row, col))
 
-            message = "退票申请已批准"
+            message = "Refund application approved"
         elif action == 'reject':
-            # 拒绝退票：不更新任何字段，保持原状
-            message = "管理员已经取消操作"
+            message = "Admin cancelled the operation"
 
         conn.commit()
         cursor.close()
@@ -427,5 +398,5 @@ def process_refund(order_id):
     except Exception as e:
         if 'conn' in locals():
             conn.rollback()
-        print(f"处理退票错误: {e}")
-        return jsonify({"success": False, "message": f"处理退票失败: {str(e)}"})
+        print(f"Process refund error: {e}")
+        return jsonify({"success": False, "message": f"Process refund failed: {str(e)}"})

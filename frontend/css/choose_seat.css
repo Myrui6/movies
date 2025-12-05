@@ -16,7 +16,6 @@ body {
     flex-direction: column;
 }
 
-/* 顶部导航栏 */
 .header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -34,7 +33,6 @@ body {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 导航菜单 */
 .nav-menu {
     display: flex;
     gap: 40px;
@@ -72,7 +70,6 @@ body {
     width: 100%;
 }
 
-/* 主要内容区域 */
 .main-content {
     flex: 1;
     padding: 40px;
@@ -85,7 +82,6 @@ body {
     margin: 0 auto;
 }
 
-/* 左侧座位图 */
 .seat-map-section {
     flex: 2;
     background: rgba(255, 255, 255, 0.95);
@@ -106,7 +102,6 @@ body {
     font-weight: 600;
     font-size: 18px;
     width: calc(100% - 60px);
-    /* 移除 margin-left，因为现在整体居中了 */
 }
 
 .seat-map {
@@ -114,7 +109,7 @@ body {
     flex-direction: column;
     gap: 10px;
     margin-bottom: 20px;
-    align-items: center; /* 居中 */
+    align-items: center;
 }
 
 .seat-row {
@@ -150,13 +145,13 @@ body {
 }
 
 .seat.available {
-    background: #90EE90; /* 更浅的绿色 */
-    color: #2c3e50; /* 深色文字 */
+    background: #90EE90;
+    color: #2c3e50;
     border-color: #7CFC00;
 }
 
 .seat.available:hover {
-    background: #7CFC00; /* 悬停时稍深 */
+    background: #7CFC00;
     color: white;
     transform: scale(1.1);
 }
@@ -169,14 +164,14 @@ body {
 }
 
 .seat.selected {
-    background: #FFB6C1; /* 更浅的粉色/红色 */
-    color: #2c3e50; /* 深色文字 */
+    background: #FFB6C1;
+    color: #2c3e50;
     border-color: #FF69B4;
     transform: scale(1.1);
 }
 
 .seat.selected:hover {
-    background: #FF69B4; /* 悬停时稍深 */
+    background: #FF69B4;
     color: white;
 }
 
@@ -214,7 +209,6 @@ body {
     border-color: #c2185b;
 }
 
-/* 右侧信息 */
 .info-section {
     flex: 1;
 }
@@ -280,7 +274,6 @@ body {
     box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
 }
 
-/* 修改座位图居中 */
 .seat-map-section {
     flex: 2;
     background: rgba(255, 255, 255, 0.95);
@@ -290,5 +283,5 @@ body {
     backdrop-filter: blur(10px);
     display: flex;
     flex-direction: column;
-    align-items: center; /* 居中 */
+    align-items: center;
 }

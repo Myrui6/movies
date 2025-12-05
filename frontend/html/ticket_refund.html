@@ -1,39 +1,36 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>申请退票 - 影院管理系统</title>
+    <title>Apply Refund - Cinema Management System</title>
     <link rel="stylesheet" href="../css/ticket_refund.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
     <div id="app">
         <div class="container">
-            <!-- 顶部导航栏 -->
             <header class="header">
-                <div class="welcome">欢迎 {{ username }} 进入影院！</div>
+                <div class="welcome">Welcome {{ username }} to Cinema!</div>
                 <nav class="nav-menu">
-                    <a href="/user-buy" class="nav-item">购票</a>
-                    <a href="/my-order" class="nav-item">我的订单</a>
-                    <a href="/" class="nav-item">退出登录</a>
+                    <a href="/user-buy" class="nav-item">Buy Tickets</a>
+                    <a href="/my-order" class="nav-item">My Orders</a>
+                    <a href="/" class="nav-item">Logout</a>
                 </nav>
             </header>
 
-            <!-- 内容标题栏 -->
             <div class="content-header">
                 <div class="section-title">
-                    <h2>退票详情</h2>
+                    <h2>Refund Details</h2>
                     <div class="title-underline"></div>
                 </div>
             </div>
 
-            <!-- 退票表单 -->
             <main class="main-content">
                 <div class="form-container">
                     <form class="refund-form" @submit.prevent="submitRefund">
                         <div class="form-group">
-                            <label for="order-id" class="form-label">订单编号</label>
+                            <label for="order-id" class="form-label">Order ID</label>
                             <input
                                 type="text"
                                 id="order-id"
@@ -45,19 +42,19 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="reason" class="form-label">退票原因</label>
+                            <label for="reason" class="form-label">Refund Reason</label>
                             <textarea
                                 id="reason"
                                 v-model="reason"
                                 class="form-textarea"
-                                placeholder="请输入退票原因..."
+                                placeholder="Enter refund reason..."
                                 rows="4"
                                 @input="autoResizeTextarea"
                             ></textarea>
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="submit-btn">确认提交</button>
+                            <button type="submit" class="submit-btn">Confirm Submit</button>
                         </div>
                     </form>
                 </div>

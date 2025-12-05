@@ -39,13 +39,13 @@ createApp({
                 const result = await response.json();
 
                 if (result.success) {
-                    alert('影片添加成功！');
+                    alert('Movie added successfully!');
                     window.location.href = '/home';
                 } else {
-                    alert('添加失败：' + result.message);
+                    alert('Failed to add: ' + result.message);
                 }
             } catch (error) {
-                alert('网络错误，请重试');
+                alert('Network error, please try again');
             }
         }
     }

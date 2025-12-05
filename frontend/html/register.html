@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>注册</title>
+    <title>Register</title>
     <link type="text/css" rel="stylesheet" href="../css/login.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
@@ -11,34 +11,28 @@
     <div id="app">
         <div class="container">
             <div class="login-wrapper">
-                <div class="header">注册</div>
+                <div class="header">Register</div>
                 <div class="form-wrapper">
-                    <!-- 用户名输入框 -->
-                    <input type="text" v-model="username" placeholder="用户名" class="input-item">
+                    <input type="text" v-model="username" placeholder="Username" class="input-item">
 
-                    <!-- 密码输入框 -->
-                    <input type="password" v-model="password" placeholder="密码" class="input-item">
+                    <input type="password" v-model="password" placeholder="Password" class="input-item">
 
-                    <!-- 确认密码输入框 -->
-                    <input type="password" v-model="confirmPassword" placeholder="确认密码" class="input-item">
+                    <input type="password" v-model="confirmPassword" placeholder="Confirm Password" class="input-item">
 
-                    <!-- 用户类型选择 -->
                     <div class="radio-group">
                         <label>
-                            <input type="radio" v-model="userType" value="用户"> 普通用户
+                            <input type="radio" v-model="userType" value="用户"> Regular User
                         </label>
                         <label>
-                            <input type="radio" v-model="userType" value="员工"> 管理员
+                            <input type="radio" v-model="userType" value="员工"> Administrator
                         </label>
                     </div>
 
-                    <!-- 消息显示 -->
                     <div v-if="message" class="msg">{{ message }}</div>
 
-                    <!-- 按钮 -->
                     <div class="btn">
-                        <button class="btn1" @click="register">注册</button>
-                        <button class="btn2" @click="goToLogin">返回登录</button>
+                        <button class="btn1" @click="register">Register</button>
+                        <button class="btn2" @click="goToLogin">Back to Login</button>
                     </div>
                 </div>
             </div>
