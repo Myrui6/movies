@@ -222,3 +222,52 @@ def get_movies_with_schedules():
     except Exception as e:
         print(f"Get movies with schedules error: {e}")
         return jsonify({"success": False, "message": f"Get movie list failed: {str(e)}"})
+
+@movies_bp.route('/api/movies/<int:movie_id>', methods=['PUT'])
+def update_movie(movie_id):
+    try:
+        name = request.form.get('name')
+        movie_type = request.form.get('type')
+        region = request.form.get('region')
+        time = request.form.get('time')
+        brief = request.form.get('brief')
+        picture = request.files.get('picture')
+
+        if not all([name, movie_type, region, time, brief]):
+            return jsonify({"success": False, "message": "Please fill all required fields"})
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT id FROM movie WHERE id = %s", (movie_id,))
+        if not cursor.fetchone():
+            cursor.close()
+            conn.close()
+            return jsonify({"success": False, "message": "Movie does not exist"})
+
+        picture_data = None
+        if picture:
+            picture_data = picture.read()
+
+        if picture_data:
+            cursor.execute("""
+                           UPDATE movie 
+                           SET name = %s, picture = %s, type = %s, region = %s, time = %s, brief = %s 
+                           WHERE id = %s
+                           """, (name, picture_data, movie_type, region, time, brief, movie_id))
+        else:
+            cursor.execute("""
+                           UPDATE movie 
+                           SET name = %s, type = %s, region = %s, time = %s, brief = %s 
+                           WHERE id = %s
+                           """, (name, movie_type, region, time, brief, movie_id))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({"success": True, "message": "Movie updated successfully"})
+
+    except Exception as e:
+        print(f"Update movie error: {e}")
+        return jsonify({"success": False, "message": f"Update failed: {str(e)}"})

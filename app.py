@@ -38,6 +38,10 @@ def home_page():
 def add_movie():
     return send_from_directory('frontend/html', 'add_movie.html')
 
+@app.route('/modify-movie')
+def modify_movie():
+    return send_from_directory('frontend/html', 'modify_movie.html')
+
 @app.route('/css/<filename>')
 def css(filename):
     return send_from_directory('frontend/css', filename)

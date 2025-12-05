@@ -62,6 +62,7 @@
                                 <td v-text="movie.time + ' minutes'"></td>
                                 <td>
                                     <button class="action-btn schedule-btn" @click="scheduleMovie(movie.id)">Schedule</button>
+                                    <button class="action-btn modify-btn" @click="modifyMovie(movie.id)">Modify</button>
                                     <button class="action-btn remove-btn" @click="removeMovie(movie.id, movie.name)">Remove</button>
                                 </td>
                             </tr>

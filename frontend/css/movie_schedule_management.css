@@ -230,6 +230,16 @@ body {
     transform: translateY(-1px);
 }
 
+.modify-btn {
+    background: #f39c12;
+    color: white;
+}
+
+.modify-btn:hover {
+    background: #d68910;
+    transform: translateY(-1px);
+}
+
 .remove-btn {
     background: #e74c3c;
     color: white;

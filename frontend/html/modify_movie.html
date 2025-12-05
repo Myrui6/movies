@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Movie - Cinema Management System</title>
+    <link rel="stylesheet" href="../css/add_schedule.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <header class="header">
+                <div class="welcome">Welcome to Cinema!</div>
+                <nav class="nav-menu">
+                    <a href="/home" class="nav-item">Schedule Management</a>
+                    <a href="/all-orders" class="nav-item">Order Transactions</a>
+                    <a href="/hall-management" class="nav-item">Hall Management</a>
+                    <a href="/" class="nav-item">Logout</a>
+                </nav>
+            </header>
+
+            <main class="main-content">
+                <div class="form-container">
+                    <h2 class="form-title">Modify Movie</h2>
+                    <div v-if="message" class="alert-message">{{ message }}</div>
+                    <form class="schedule-form" @submit.prevent="submitForm" v-if="movieData">
+                        <div class="form-group">
+                            <label for="movieName">Movie Name</label>
+                            <input type="text" id="movieName" class="form-input" v-model="movieData.name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="type">Genre</label>
+                            <input type="text" id="type" class="form-input" v-model="movieData.type" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="region">Region</label>
+                            <input type="text" id="region" class="form-input" v-model="movieData.region" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="time">Duration (minutes)</label>
+                            <input type="number" id="time" class="form-input" v-model="movieData.time" required min="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="brief">Synopsis</label>
+                            <textarea id="brief" class="form-textarea" v-model="movieData.brief" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="picture">Poster Image</label>
+                            <input type="file" id="picture" class="form-file" @change="handleFileUpload" accept="image/*">
+                            <div v-if="movieData.picture" class="current-image">
+                                <p>Current Poster:</p>
+                                <img :src="movieData.picture" alt="Current Poster" class="preview-image">
+                                <p class="image-hint">Leave empty to keep current image</p>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Confirm Update</button>
+                    </form>
+                    <div v-else class="loading-message">Loading movie data...</div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/modify_movie.js"></script>
+</body>
+</html>

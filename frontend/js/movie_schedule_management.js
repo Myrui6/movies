@@ -39,6 +39,10 @@ createApp({
             window.location.href = `/movie-schedule-detail?id=${movieId}`;
         },
 
+        modifyMovie(movieId) {
+            window.location.href = `/modify-movie?id=${movieId}`;
+        },
+
         async removeMovie(movieId, movieName) {
             if (confirm(`Are you sure to remove movie "${movieName}"?\n\nNote: This will also delete all schedule information for this movie!`)) {
                 try {

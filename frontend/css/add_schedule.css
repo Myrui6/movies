@@ -89,29 +89,37 @@ body {
 }
 
 .form-title {
-    text-align: center;
     color: #2c3e50;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     margin-bottom: 30px;
+    text-align: center;
+}
+
+.alert-message {
+    background: #e74c3c;
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .schedule-form {
     display: flex;
     flex-direction: column;
-    gap: 25px;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    margin-bottom: 25px;
 }
 
 .form-group label {
+    display: block;
     color: #2c3e50;
     font-size: 16px;
     font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .form-input {
@@ -130,10 +138,59 @@ body {
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
-.form-input:read-only {
-    background-color: #f8f9fa;
-    color: #6c757d;
-    cursor: not-allowed;
+.form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: white;
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-file {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: white;
+    cursor: pointer;
+}
+
+.form-file:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.current-image {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.preview-image {
+    max-width: 200px;
+    max-height: 300px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+}
+
+.image-hint {
+    color: #7f8c8d;
+    font-size: 14px;
+    margin-top: 5px;
 }
 
 .submit-btn {
@@ -154,4 +211,11 @@ body {
     background: #2980b9;
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+}
+
+.loading-message {
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 18px;
+    padding: 40px 0;
 }
