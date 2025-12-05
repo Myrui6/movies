@@ -54,7 +54,64 @@ def login():
         return jsonify({"success": False, "message": f"登录失败: {str(e)}"})
 
 
-# 新增获取当前用户信息的接口
+
+@auth_bp.route('/api/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    user_type = data.get('userType')
+
+    if not username or not password:
+        return jsonify({"success": False, "message": "用户名和密码不能为空"})
+
+    if len(password) < 6:
+        return jsonify({"success": False, "message": "密码长度不能少于6位"})
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        if user_type == '员工':
+            cursor.execute("SELECT id FROM administrator WHERE name = %s", (username,))
+            table_name = "administrator"
+        else:
+            cursor.execute("SELECT id FROM user WHERE name = %s", (username,))
+            table_name = "user"
+
+        existing_user = cursor.fetchone()
+        if existing_user:
+            cursor.close()
+            conn.close()
+            return jsonify({"success": False, "message": f"用户名 '{username}' 已存在"})
+
+        if user_type == '员工':
+            cursor.execute("INSERT INTO administrator (name, password) VALUES (%s, %s)",
+                           (username, password))
+        else:
+            cursor.execute("INSERT INTO user (name, password) VALUES (%s, %s)",
+                           (username, password))
+
+        conn.commit()
+        user_id = cursor.lastrowid
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({
+            "success": True,
+            "message": f"{user_type}注册成功",
+            "user": {
+                "id": user_id,
+                "username": username,
+                "type": user_type
+            }
+        })
+
+    except Exception as e:
+        print(f"注册错误: {e}")
+        return jsonify({"success": False, "message": f"注册失败: {str(e)}"})
+
 @auth_bp.route('/api/current-user', methods=['GET'])
 def get_current_user():
     if 'username' in session:
@@ -73,7 +130,6 @@ def get_current_user():
         }), 401
 
 
-# 新增退出登录接口
 @auth_bp.route('/api/logout', methods=['POST'])
 def logout():
     session.clear()

@@ -4,14 +4,12 @@ from database import get_db_connection
 halls_bp = Blueprint('halls', __name__)
 
 
-# 获取影厅列表
 @halls_bp.route('/api/halls', methods=['GET'])
 def get_halls():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 获取所有影厅的 id, name, total_rows, total_columns
         cursor.execute("SELECT id, name, total_rows, total_columns FROM hall ORDER BY id")
         halls_data = cursor.fetchall()
 
@@ -36,7 +34,6 @@ def get_halls():
 
 
 
-# 添加新影厅 (行内添加的“确定”按钮触发)
 @halls_bp.route('/api/halls', methods=['POST'])
 def add_hall():
     data = request.get_json()
@@ -56,7 +53,6 @@ def add_hall():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 检查影厅名是否已存在（利用UNIQUE约束）
         try:
             cursor.execute("""
                            INSERT INTO hall (name, total_rows, total_columns)
@@ -72,7 +68,7 @@ def add_hall():
             conn.rollback()
             if 'Duplicate entry' in str(db_e) and 'name' in str(db_e):
                 return jsonify({"success": False, "message": f"影厅名 '{name}' 已存在"})
-            raise db_e  # 抛出其他数据库错误
+            raise db_e
 
     except ValueError:
         return jsonify({"success": False, "message": "行数和列数必须是有效数字"})
@@ -81,14 +77,12 @@ def add_hall():
         return jsonify({"success": False, "message": f"添加影厅失败: {str(e)}"})
 
 
-# 删除影厅
 @halls_bp.route('/api/halls/<int:hall_id>', methods=['DELETE'])
 def delete_hall(hall_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 1. 检查是否有排片场次引用该影厅
         cursor.execute("SELECT COUNT(*) FROM schedule WHERE hall_id = %s", (hall_id,))
         schedule_count = cursor.fetchone()[0]
 
@@ -98,7 +92,6 @@ def delete_hall(hall_id):
             return jsonify(
                 {"success": False, "message": f"删除失败：该影厅下有 {schedule_count} 个排片场次，请先删除相关场次。"})
 
-        # 2. 执行删除操作
         cursor.execute("DELETE FROM hall WHERE id = %s", (hall_id,))
         deleted_rows = cursor.rowcount
 

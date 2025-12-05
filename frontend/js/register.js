@@ -5,21 +5,33 @@ createApp({
         return {
             username: '',
             password: '',
+            confirmPassword: '',
             userType: '用户',
             message: ''
         }
     },
     methods: {
-        async login() {
+        async register() {
             this.message = '';
 
+            // 验证输入
             if (!this.username || !this.password) {
                 this.message = '请输入用户名和密码';
                 return;
             }
 
+            if (this.password !== this.confirmPassword) {
+                this.message = '两次输入的密码不一致';
+                return;
+            }
+
+            if (this.password.length < 6) {
+                this.message = '密码长度不能少于6位';
+                return;
+            }
+
             try {
-                const response = await fetch('/api/login', {
+                const response = await fetch('/api/register', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -32,20 +44,21 @@ createApp({
                 const result = await response.json();
 
                 if (result.success) {
-                    // 根据用户类型跳转到不同页面
-                    window.location.href = result.redirect;
+                    this.message = result.message;
+                    // 注册成功后延迟跳转到登录页
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1500);
                 } else {
                     this.message = result.message;
                 }
             } catch (error) {
-                this.message = '网络错误';
+                this.message = '网络错误，请重试';
             }
         },
-        
-        // 修改原来的 register 方法
-       register() {
-    // 跳转到注册页面
-    window.location.href = '/register';
-}
+
+        goToLogin() {
+            window.location.href = '/';
+        }
     }
 }).mount('#app');

@@ -2,9 +2,9 @@ from flask import Flask, send_from_directory
 from flask_cors import CORS
 from routes.auth import auth_bp
 from routes.movies import movies_bp
-from routes.schedules import schedules_bp  # 新增导入
+from routes.schedules import schedules_bp
 from routes.seats import seats_bp
-from routes.orders import orders_bp  # 新增导入
+from routes.orders import orders_bp
 from routes.halls import halls_bp
 import os
 
@@ -12,24 +12,25 @@ app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'
 CORS(app)
 
-# 注册蓝图
+
 app.register_blueprint(auth_bp)
 app.register_blueprint(movies_bp)
 app.register_blueprint(schedules_bp)
-app.register_blueprint(seats_bp) # 新增注册
-# 注册蓝图
-app.register_blueprint(orders_bp)  # 新增注册
-
+app.register_blueprint(seats_bp)
+app.register_blueprint(orders_bp)
 app.register_blueprint(halls_bp)
 
-# 创建上传目录
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# 静态文件路由
 @app.route('/')
 def home():
     return send_from_directory('frontend/html', 'login.html')
+
+
+@app.route('/register')
+def register_page():
+    return send_from_directory('frontend/html', 'register.html')
 
 @app.route('/home')
 def home_page():
@@ -47,7 +48,6 @@ def css(filename):
 def js(filename):
     return send_from_directory('frontend/js', filename)
 
-# 提供上传文件的访问
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
@@ -77,12 +77,10 @@ def my_order():
     return send_from_directory('frontend/html', 'my_order.html')
 
 
-# 在现有的路由后面添加
 @app.route('/ticket-refund')
 def ticket_refund():
     return send_from_directory('frontend/html', 'ticket_refund.html')
 
-# 在现有的路由后面添加
 @app.route('/all-orders')
 def all_orders():
     return send_from_directory('frontend/html', 'all_orders.html')
@@ -92,5 +90,5 @@ def hall_management():
     return send_from_directory('frontend/html', 'hall_management.html')
 
 if __name__ == '__main__':
-    print(f"上传目录: {UPLOAD_FOLDER}")
+    print(f"upload: {UPLOAD_FOLDER}")
     app.run(debug=True, port=5000)
