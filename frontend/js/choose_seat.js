@@ -135,42 +135,52 @@ createApp({
         },
 
         async confirmPurchase() {
-            if (this.selectedSeatsCount === 0) {
-                alert('Please select seats first');
-                return;
-            }
+    if (this.selectedSeatsCount === 0) {
+        alert('Please select seats first');
+        return;
+    }
 
-            try {
-                const orderData = {
-                    movie_name: this.scheduleInfo.movie_name,
-                    start_time: this.scheduleInfo.start_time,
-                    hall: this.scheduleInfo.hall,
-                    seat: this.selectedSeatsText,
-                    total_price: parseFloat(this.totalPrice),
-                    schedule_id: parseInt(this.scheduleId),
-                    selected_seats: this.selectedSeats
-                };
+    if (!confirm(`Confirm purchase of ${this.selectedSeatsCount} tickets for ${this.totalPrice}￥?`)) {
+        return;
+    }
 
-                const response = await fetch('/api/orders', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(orderData)
-                });
+    try {
+        const orderData = {
+            movie_name: this.scheduleInfo.movie_name,
+            start_time: this.scheduleInfo.start_time,
+            hall: this.scheduleInfo.hall,
+            seat: this.selectedSeatsText,
+            total_price: parseFloat(this.totalPrice),
+            schedule_id: parseInt(this.scheduleId),
+            selected_seats: this.selectedSeats
+        };
 
-                const result = await response.json();
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData)
+        });
 
-                if (result.success) {
-                    alert('Purchase successful!');
-                    window.location.href = `/my-order`;
-                } else {
-                    alert('Purchase failed: ' + result.message);
-                }
-            } catch (error) {
-                console.error('Purchase error:', error);
-                alert('Network error, please try again');
+        const result = await response.json();
+
+        if (result.success) {
+            alert(`Purchase successful for user ${result.data.username}!`);
+            window.location.href = `/my-order`;
+        } else {
+            if (result.code === 'SEAT_UNAVAILABLE') {
+                alert('Some seats are no longer available. Please select other seats.');
+                this.selectedSeats = [];
+                this.loadSeats();
+            } else {
+                alert('Purchase failed: ' + result.message);
             }
         }
+    } catch (error) {
+        console.error('Purchase error:', error);
+        alert('Network error, please try again');
+    }
+}
     }
 }).mount('#app');

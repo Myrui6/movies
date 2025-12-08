@@ -57,8 +57,12 @@ def get_orders():
         print(f"Get orders error: {e}")
         return jsonify({"success": False, "message": f"Get orders failed: {str(e)}"})
 
+
 @orders_bp.route('/api/orders', methods=['POST'])
 def create_order():
+    conn = None
+    cursor = None
+
     try:
         if 'user_id' not in session:
             return jsonify({"success": False, "message": "User not logged in"}), 401
@@ -79,29 +83,94 @@ def create_order():
         conn = get_db_connection()
         cursor = conn.cursor()
 
+        cursor.execute("START TRANSACTION")
+
+        cursor.execute("SELECT name FROM user WHERE id = %s", (user_id,))
+        actual_user = cursor.fetchone()
+
+        if not actual_user:
+            cursor.execute("ROLLBACK")
+            cursor.close()
+            conn.close()
+            return jsonify({"success": False, "message": "User not found"})
+
+        username = actual_user[0]
+
+        seat_conditions = []
+        seat_params = []
+        for seat_info in selected_seats:
+            seat_conditions.append("(row_num = %s AND col_num = %s)")
+            seat_params.extend([seat_info['row'], seat_info['col']])
+
+        if seat_conditions:
+            query = f"""
+                SELECT row_num, col_num, state 
+                FROM seat 
+                WHERE schedule_id = %s AND ({' OR '.join(seat_conditions)})
+                FOR UPDATE
+            """
+            cursor.execute(query, [schedule_id] + seat_params)
+            seats = cursor.fetchall()
+
+            unavailable_seats = []
+            for seat_row in seats:
+                if seat_row[2] != 0:
+                    unavailable_seats.append(f"Row {seat_row[0]} Seat {seat_row[1]}")
+
+            if unavailable_seats:
+                cursor.execute("ROLLBACK")
+                cursor.close()
+                conn.close()
+                return jsonify({
+                    "success": False,
+                    "message": f"Seats no longer available: {', '.join(unavailable_seats)}",
+                    "code": "SEAT_UNAVAILABLE"
+                })
+
         cursor.execute("""
                        INSERT INTO `order` (user_id, schedule_id, seat_details, total_price, state)
                        VALUES (%s, %s, %s, %s, %s)
                        """, (user_id, schedule_id, seat, total_price, 0))
 
+        order_id = cursor.lastrowid
+
         for seat_info in selected_seats:
             cursor.execute("""
-                           UPDATE seat 
-                           SET state = 1 
+                           UPDATE seat
+                           SET state = 1
                            WHERE schedule_id = %s
                              AND row_num = %s
                              AND col_num = %s
                            """, (schedule_id, seat_info['row'], seat_info['col']))
 
         conn.commit()
+
         cursor.close()
         conn.close()
 
-        return jsonify({"success": True, "message": "Order created successfully"})
+        return jsonify({
+            "success": True,
+            "message": "Order created successfully",
+            "data": {
+                "order_id": order_id,
+                "username": username
+            }
+        })
 
     except Exception as e:
+        try:
+            if cursor:
+                cursor.execute("ROLLBACK")
+        except:
+            pass
+
         print(f"Create order error: {e}")
         return jsonify({"success": False, "message": f"Create order failed: {str(e)}"})
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 @orders_bp.route('/api/orders/<int:order_id>/refund', methods=['POST'])
 def apply_refund(order_id):

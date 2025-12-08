@@ -3,6 +3,7 @@ from database import get_db_connection
 
 auth_bp = Blueprint('auth', __name__)
 
+
 @auth_bp.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -33,6 +34,7 @@ def login():
             session['user_id'] = user[0]
             session['username'] = user[1]
             session['user_type'] = user_type
+            session.permanent = True
 
             return jsonify({
                 "success": True,
@@ -50,6 +52,7 @@ def login():
     except Exception as e:
         print(f"Login error: {e}")
         return jsonify({"success": False, "message": f"Login failed: {str(e)}"})
+
 
 @auth_bp.route('/api/register', methods=['POST'])
 def register():
@@ -108,22 +111,56 @@ def register():
         print(f"Registration error: {e}")
         return jsonify({"success": False, "message": f"Registration failed: {str(e)}"})
 
+
 @auth_bp.route('/api/current-user', methods=['GET'])
 def get_current_user():
-    if 'username' in session:
-        return jsonify({
-            "success": True,
-            "data": {
-                "id": session['user_id'],
-                "username": session['username'],
-                "type": session['user_type']
-            }
-        })
-    else:
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        user_id = session.get('user_id')
+        user_type = session.get('user_type')
+
+        if not user_id or not user_type:
+            cursor.close()
+            conn.close()
+            return jsonify({
+                "success": False,
+                "message": "User not logged in"
+            }), 401
+
+        if user_type == '员工':
+            cursor.execute("SELECT id, name FROM administrator WHERE id = %s", (user_id,))
+        else:
+            cursor.execute("SELECT id, name FROM user WHERE id = %s", (user_id,))
+
+        user = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        if user:
+            return jsonify({
+                "success": True,
+                "data": {
+                    "id": user[0],
+                    "username": user[1],
+                    "type": user_type
+                }
+            })
+        else:
+            session.clear()
+            return jsonify({
+                "success": False,
+                "message": "User not found"
+            }), 401
+
+    except Exception as e:
+        print(f"Get current user error: {e}")
         return jsonify({
             "success": False,
-            "message": "User not logged in"
+            "message": "Authentication error"
         }), 401
+
 
 @auth_bp.route('/api/logout', methods=['POST'])
 def logout():

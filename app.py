@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request, g
 from flask_cors import CORS
 from routes.auth import auth_bp
 from routes.movies import movies_bp
@@ -10,7 +10,14 @@ import os
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'
-CORS(app)
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = False
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+CORS(app, supports_credentials=True)
+
+@app.before_request
+def before_request():
+    g.session_id = request.cookies.get('session')
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(movies_bp)
