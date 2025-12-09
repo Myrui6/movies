@@ -82,7 +82,6 @@ def create_order():
 
         conn = get_db_connection()
         cursor = conn.cursor()
-
         cursor.execute("START TRANSACTION")
 
         cursor.execute("SELECT name FROM user WHERE id = %s", (user_id,))
@@ -90,8 +89,6 @@ def create_order():
 
         if not actual_user:
             cursor.execute("ROLLBACK")
-            cursor.close()
-            conn.close()
             return jsonify({"success": False, "message": "User not found"})
 
         username = actual_user[0]
@@ -119,8 +116,6 @@ def create_order():
 
             if unavailable_seats:
                 cursor.execute("ROLLBACK")
-                cursor.close()
-                conn.close()
                 return jsonify({
                     "success": False,
                     "message": f"Seats no longer available: {', '.join(unavailable_seats)}",
@@ -143,34 +138,37 @@ def create_order():
                              AND col_num = %s
                            """, (schedule_id, seat_info['row'], seat_info['col']))
 
-        conn.commit()
-
-        cursor.close()
-        conn.close()
-
-        return jsonify({
+        response_data = {
             "success": True,
             "message": "Order created successfully",
             "data": {
                 "order_id": order_id,
                 "username": username
             }
-        })
+        }
+
+        conn.commit()
+
+        return jsonify(response_data)
 
     except Exception as e:
         try:
-            if cursor:
-                cursor.execute("ROLLBACK")
-        except:
-            pass
+            if conn:
+                conn.rollback()
+        except Exception as rollback_error:
+            print(f"Rollback error: {rollback_error}")
 
         print(f"Create order error: {e}")
         return jsonify({"success": False, "message": f"Create order failed: {str(e)}"})
+
     finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+        try:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
+        except Exception as close_error:
+            print(f"Error closing connection: {close_error}")
 
 @orders_bp.route('/api/orders/<int:order_id>/refund', methods=['POST'])
 def apply_refund(order_id):

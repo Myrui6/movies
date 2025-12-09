@@ -87,9 +87,11 @@ def register():
         if user_type == '员工':
             cursor.execute("INSERT INTO administrator (name, password) VALUES (%s, %s)",
                            (username, password))
+            user_type_display = "Administrator"
         else:
             cursor.execute("INSERT INTO user (name, password) VALUES (%s, %s)",
                            (username, password))
+            user_type_display = "User"
 
         conn.commit()
         user_id = cursor.lastrowid
@@ -99,7 +101,7 @@ def register():
 
         return jsonify({
             "success": True,
-            "message": f"{user_type} registration successful",
+            "message": f"{user_type_display} registration successful",  # 使用英文显示
             "user": {
                 "id": user_id,
                 "username": username,
